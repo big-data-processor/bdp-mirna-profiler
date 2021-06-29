@@ -1,0 +1,19 @@
+- var:
+    projectInfoExcel: "{{ argv[0] }}" #The project info file|inFile|project-info|xlsx|and|
+    trimmedSeqFolder: "{{ argv[1] }}" #The input folder containing *.sam and *_adapter.report files|inFile|Folder,trimmed-seq|Folder|and|
+    outputProjectFolder: "{{ argv[2] }}" #The project folder|outFile|Folder,seq-project|Folder|or|
+  batch-items: "{{ var.projectInfoExcel | listFromExcel('Samples', true, 'object') | _('groupBy', 'LIBID') | _('values') }}"
+  task-template:
+    name: make-project-folder
+    image: "alpine"
+    condition: "{{ true if item[0] and item[0].LIBID else false}}"
+    exec: "cp"
+    args: |
+      - -f
+      {% for fileToBeCp in item | _('map', 'name') | suffixArray('.sam') %}
+      - "{{ var.trimmedSeqFolder | pathMapping }}/{{ fileToBeCp }}"
+      {% endfor %}
+      {% for fileToBeCp in item | _('map', 'name') | suffixArray('_adapter.report') %}
+      - "{{ var.trimmedSeqFolder | pathMapping }}/{{ fileToBeCp }}"
+      {% endfor %}
+      - "{{ path.join(var.outputProjectFolder, item[0].LIBID) | ensureDir | pathMapping }}"

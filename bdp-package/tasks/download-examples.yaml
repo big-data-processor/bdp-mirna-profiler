@@ -1,0 +1,17 @@
+# Download Example fastq.gz files from arrayExpress
+- var:
+    sdrfPath: 'https://www.ebi.ac.uk/arrayexpress/files/E-MTAB-4502/E-MTAB-4502.sdrf.txt' # This is a tsv file.
+    exampleSeqFolder: "{{ argv[0] | ensureDir }}"
+  batch-items: "{{ var.sdrfPath | httpGET(var.exampleSeqFolder + '/sample-list.txt') | listFromText('\t', true, 'array') }}" # This can work
+  #batch-items: "{{ var.sdrfPath | httpGET | _('split', '\n') | _('slice', 1) |  _('invokeMap', 'split', '\t') | dump }}" # This can work without saving to a file.
+  task-template: 
+  # The batch-items gives a list (can be a list of strings, a list of arrays, a list of objects). If batch-item is set, each element in the list will be the 'item' in the template.
+    condition: "{{ true if (item[24] and item[27] and (not item[24] | regTest('^shSyn', 'g'))) else false }}"
+    name: "download-example-data"
+    image: biocontainers/biocontainers
+    exec: wget
+    args:
+      - -O
+      - "{{ var.exampleSeqFolder | ensureDir | pathMapping | suffix('/' + item[24]) }}"
+      # - "{{ item[27] }}" # We got issues of refused connections using ftp to download data.
+      - "{% set urlObj = item[27] | parseURL %}ftp://{{ urlObj.host }}/{{ urlObj.pathname }}" # so we changed the protocol to http

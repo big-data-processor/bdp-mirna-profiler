@@ -1,0 +1,12 @@
+- var:
+    projectInfoExcel: "{{ argv[0] }}" #The project info file|inFile|project-info|xlsx|and|
+    rawSeqFolder: "{{ argv[1] }}" #raw sequence folder|inFile|Folder,raw-sequences|Folder|and|
+    mergedSeqFolder: "{{ argv[2] }}" #Output merged fastq folder|outFile|Folder,fastq-merged|Folder|or|
+  batch-items: "{{ var['projectInfoExcel'] | listFromExcel('Samples', true, 'object') | _('groupBy', 'name') | _('values') }}"
+  task-template:
+    name: merge-fastq-gz
+    image: alpine
+    exec: /bin/sh
+    args:
+      - -c
+      - "cat {% for file in item %}{{ path.join(var['rawSeqFolder'], file.path) | pathMapping }} {% endfor %} > {{ path.join(var.mergedSeqFolder | ensureDir, item[0].name) | suffix('.fastq.gz') | pathMapping }}"

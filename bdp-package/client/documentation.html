@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>BDP miRNA profiler</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="./theme/css/adminlte.min.css">
+  <link rel="stylesheet" href="./styles/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" integrity="sha512-ZKX+BvQihRJPA8CROKBhDNvoc2aDMOdAlcm7TUQY+35XYtrd3yh95QOOhsPDQY9QnKE0Wqag9y38OIgEvb88cA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.jsdelivr.net/gh/big-data-processor/bdp-page-api/bdp-page-api.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js" integrity="sha512-k2GFCTbp9rQU412BStrcD/rlwv1PYec9SNrkbQlo6RZCf75l6KcC3UwDY8H5n5hl4v77IDtIPwOk9Dqjs/mMBQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block homeLink">
+        <a href="#" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block docLink">
+        <a href="#" class="nav-link text-info font-weight-bold">Documentation</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block planListLink">
+        <a href="#" class="nav-link">Plan List</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block prepareProjectInfoLink">
+        <a href="#" class="nav-link">Create Plan</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block executePipelineLink">
+        <a href="#" class="nav-link">Run Plan</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class='nav-item'>
+        <a class="nav-link link refreshLink" role="button">
+          <i class="fas fa-sync-alt"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link pageListLink" role="button">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link toggleFullPageLink" role="button">
+          <i class="fas fa-expand-alt"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link">
+      <img src="/assets/img/BDP_VER0_7_4C_Black.svg" class="brand-image" style="opacity: .8; width: 40px; margin-left: 5px;">
+      <span class="brand-text font-weight-light">BDP miRNA Profiler</span>
+    </a>
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-header">Current Project</li>
+          <li class='nav-item' id='currentProjectLink'></li>
+          <li class="nav-header">Introduction</li>
+          <li class='nav-item homeLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>Home</p>
+            </a>
+          </li>
+          <li class='nav-item docLink'>
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>Documentation</p>
+            </a>
+          </li>
+          <li class='nav-item planListLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-list"></i>
+              <p>Plans in this project</p>
+            </a>
+          </li>
+          <li class="nav-header">Run the workflow</li>
+          <li class='nav-item prepareProjectInfoLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tasks"></i>
+              <p>1. Create an analysis plan</p>
+            </a>
+          </li>
+          <li class='nav-item executePipelineLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-cogs fa-fw"></i>
+              <p>2. Execute a plan</p>
+            </a>
+          </li>
+          <li class="nav-header">Preparations</li>
+          <li class='nav-item prepareRefLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-download"></i>
+              <p>1. Download references</p>
+            </a>
+          </li>
+          <li class='nav-item dbPrepLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-database"></i>
+              <p>2. Prepare databases</p>
+            </a>
+          </li>
+          <li class='nav-item downloadExampleLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>3. Get example data</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <div class="content-wrapper">
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark" id='pageTitle'></h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item homeLink"><a href='#'>Home</a></li>
+              <li class="breadcrumb-item active">Documentation</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h2>The workflow for the miRNA sequence data analysis</h2>
+            <p>
+              This miRNA analysis workflow consists of 15 steps (see the figure below) containing six major parts: 1) adapter sequence trimming, 2) genome mapping, 3) sequence quality control, 4) annotation, 5) expression summarizing, 6) final report generating.
+              This 15-step workflow was made reproducible and can be executed via web pages. The two inputs to run this workflow are a folder containing raw sequence fastq.gz files and an Excel file describes the miRNA analysis plan.
+              This analysis plan has its specific format and contains the metadata for each of the input sequence files, the sample conditions, and the comparison contrasts among the sample conditions.
+              We provided <a href='#' class='prepareProjectInfoLink'>a web page (click to view)</a> to guide users to prepare this plan.
+              Then, this plan can be selected to run the analysis workflow and our BDP workbench takes care of the details to run and monitor tasks in each workflow step.
+            </p>
+            <a href='./img/BDP_miRNA_workflow.png' data-lightbox="workflow" data-title="The workflow of the BDP miRNA profiler package" title='click to enlarge this figure'>
+              <img class="img-fluid img-thumbnail" src="./img/BDP_miRNA_workflow.png"/>
+            </a>
+            <p>
+              This application is also used to demonstrate that BDP package developers can design graphical web interfaces, such as this web page you are currently viewing, in their package, 
+              so that users can have friendly interfaces to execute pipelines and visualize results interactively.
+              Here, we would like to demonstrate that BDP can assist developers to build user-friendly apps which are in the form of the BDP package.
+              This miRNA analysis workflow contains the BCGSC miRNA profiling pipeline which requires users to prepare the reference database with MySQL. For downstream analyses, additional reference files are also needed.
+              There prerequistes can be prepared automatically by several mouse clicks in our customized web pages of this package. Users can also prepare the required analysis plan, run the analysis both, and view results interactively all via web pages.
+              The user experience can be very friendly just like using a web service application.
+            </p>
+            <h2>Step 0. One-time preparations before running the workflow</h2>
+            <p>
+              There are two prerequistes that are needed for this workflow and preparing these two prerequistes is an one-time effort.
+              The first thing is to download reference files of seven types containing the genome sequence, genome annoations, KEGG pathway annotations, Gene Ontology annotations, miRNA targets from TargetScan ,and MySQL database files of miRBase and UCSC genome references.
+              The second thing is to prepare the MySQL database serving the miRBase and the UCSC genome references. This database is required by the bcgsc-miRNA pipeline.
+            </p>
+            <p>
+              <h4>Preparation steps</h4>
+              <ol>
+                In the "Preparation" section of the menu on the left, you can find the three steps as follows.
+                <li><b>Download references</b>: This page help you to download the required references including the database files automatically. (<a href='#' class='prepareRefLink'>Click to view the page</a>)</li>
+                  By click the "Proceed" button at the right-side bottom as the following figure. The download task will be executed and a corresponding download result record will be created. You may notice the increased number of the Results in this project.<br>
+                  <a href='./img/0_1_download_references.png' data-lightbox="download-references" data-title="Downloading required references" title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/0_1_download_references.png" style='max-height: 480px;'>
+                  </a>
+                </li>
+                <li><b>Prepare databases</b>: This page help you to create the MySQL database with Docker (<a href='#' class='dbPrepLink'>click to view the page</a>). 
+                  <div class="alert alert-primary" role="alert">
+                    <b>[NOTE] If you already have a well-configured MySQL database containg the mirBase and the UCSC genome refernces, you may skip the database preparation.<br><br>
+                      However, you need to manually configure the db_connections.cfg file located in this pacakge.</b> 
+                    Don't worry, BDP provides web pages that allow you to modify the package content only if you have the corresponding privileges. Here is the step to modify this package file. 
+                    <ol>
+                      <li>Go to Administration section and click "Manage Packages" link.</li>
+                      <li>Then, find the this package, namely the "bdp-mirna-profiler-0.3" package, and click it. You are able to view/edit all the tasks defined in this package.</li>
+                      <li>Find the "Package file manager" section and click it to expand this package file browser.</li>
+                      <li>In this package file browser, click to the path "scripts/bcgsc-mirna-v0.2.7/config/db_connections.cfg" and you will see an online editor pops up and shows the config file content.</li>
+                      <li>Define your databse connection settings in the format that is described in this file with examples provided.</li>
+                      <li>After editing, remember to save the changes by ctrl + s or the save button at the right bottom.</li>
+                    </ol>
+                  </div>
+                  First, by filling the related information as the following figure, a new MySQL database can be initiated.<br>
+                  <a href='./img/0_2_1_prepare_database_1.png' data-lightbox="database-preparations" data-title="Initiate the MySQL database" title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/0_2_1_prepare_database_1.png" style='max-height: 360px;'>
+                  </a><br>
+                  Then, you can import the miRBase v22b and the UCSC genome references. The database files of the miRBase was already included in this package, you can directly click the "Import" button to import.
+                  As for the UCSC genome references, these MySQL database files are required to be downloaded from the previous "Download references" step.<br>
+                  <a href='./img/0_2_1_prepare_database_2.png' data-lightbox="database-preparations" data-title="Import miRNA and UCSC genome references into the MySQL database" title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/0_2_1_prepare_database_2.png" style='max-height: 360px;'>
+                  </a><br>
+                  *Note that after these two importing steps, the db_connection.cfg config file described in the above note block will also be updated with the newly imported database information. 
+                </li>
+                <li><b>Get example data</b>: (Optional) Download the example small RNA sequence datasets from ArrayExpress by one click.<br>
+                  <a href='./img/0_3_download_example_data.png' data-lightbox="get-example-data" data-title="Download the example dataset" title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/0_3_download_example_data.png" style='max-height: 360px;'>
+                  </a>
+                </li>
+              </ol>
+            </p>
+            <h2>Step 1. Create an analysis plan</h2>
+            <p>
+              In the "Run the workflow" section of the left menu, click the "1. Create an analysis plan" or <a href='#' class='prepareProjectInfoLink'>click here to view the page</a>.<br>
+              You can follow the instructions on this page to prepare your analysis plan. There are 7 forms to fill to create an analysis plan:<br>
+              <div class="alert alert-primary" role="alert">
+                <b>[NOTE]</b> Please use legal characters like a-z, A-Z, 0-9, and underline (_) for the library id, sample name, and condition. Avoid other special characters and white space.
+              </div>
+              <ul>
+                <li><b>1.1 The basic information for the plan.</b>  All of the information is used for display in the pdf report, except the three cutoffs of the p-value and the log2 fold changes for positive and negative miRNA expressions.
+                  These cutoff settings will be used for differential expression analysis.<br>
+                  <a href='./img/1_1_basic_info.png' data-lightbox="create-plan" data-title="Download the example dataset" title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/1_1_basic_info.png" style='max-height: 360px;'>
+                  </a>
+                </li>
+                <li><b>1.2 Preparing an input folder containing raw sequencing fastq.gz files.</b> In this step, you can create a folder record by uploading sequence files or directly import the folder that are already on the server and contains the sequence files.
+                  You can also select a previously prepared folder record as the input. Use one of the three approaches (selecting an uploaded record, uploading files, or import from a server path) to specify this input folder record for following configurations.
+                  <br><a href='./img/1_2_import_folder_1.png' data-lightbox="create-plan" data-title="Select the approach to configure the input folder containing the sequence files." title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/1_2_import_folder_1.png" style='max-height: 220px;'>
+                  </a><br>
+                  The approach to import from a server path requires the privlege of a power user.
+                  Also, it is important to note that this folder record can be created by the BDP built-in page by clicking the "Import files" link from the "Quick Start" section of the left navigation panel.
+                  Remember to add the "raw-sequences" tag to this folder record in the BDP built-in page, so that this folder record can be valid and selected to run the workflow. The tag is used as a fail proof or a filter to prevent users invalid file/folder records as inputs.
+                  The required tags will be automatically added by this page, but in the BDP built-in pages, tags require manual assignments.
+                </li>
+                <li><b>1.3 The sample information for sequencing files.</b> In this seciton, the library id and sample name are required for each of the sequencing files. Sequence file paths (fastq.gz) are listed from the input folder record. 
+                  The library id is used as the LIBID in the bcgsc-mirna pipeline. As for the sample name, use the same sample name for sequencing files of different lanes corresponding to the same sample. These files of the same same name will be merged to analyze.
+                  Besides, you can also exclude unwanted files by unchecking the corresponding checkboxes.
+                  <br><a href='./img/1_3_sample_info.png' data-lightbox="create-plan" data-title="Configure your sample information" title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/1_3_sample_info.png" style='max-height: 360px;'>
+                  </a><br>
+                </li>
+                <li><b>1.4 The conditions for comparisons.</b> You can specify conditions for each of the sample names based on the previously specified sample information. Also, specify the batch information with numbers.
+                  Use the same number for the same batch. The DESeq2 tool considers the batch information in the differential expression analysis. If your samples have no experimental batches, you may specify 1 for all samples.
+                  <br><a href='./img/1_4_sample_conditions.png' data-lightbox="create-plan" data-title="Configure your sample conditions" title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/1_4_sample_conditions.png" style='max-height: 480px;'>
+                  </a><br>
+                </li>
+                <li><b>1.5 The comparison contrasts.</b> Select two conditions from the step 1.4 to compare.
+                  You may set multiple comparison contrasts in this step. The left condition is used as the numerator and the right one is denominator for the calculation of log2 fold changes.
+                  <br><a href='./img/1_5_comparison_contrasts.png' data-lightbox="create-plan" data-title="Configure the paire-wise comparison contrasts among conditions." title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/1_5_comparison_contrasts.png" style='max-height: 220px;'>
+                  </a><br>
+                </li>
+                <li><b>1.6 Saving this plan as a DataFile record.</b> The plan is basically finished configuring with the previous 1.1 ~ 1.5 steps. This step configures metadata for the created DataFile record of the analysis plan.
+                  The metadata of a DataFile record includes the name, prefix, suffix, tags and the description of this DataFile record. The required tag "project-info" is automatically added and you could add additional tags of your preferences.
+                  The file tag can be used to filter data files when browsing data files and also to prevent specifying invalid task argument when setting arguments to run tasks.
+                  <br><a href='./img/1_6_save_the_plan.png' data-lightbox="create-plan" data-title="Fill the metadata information adn save the created plan as a DataFile record." title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/1_6_save_the_plan.png" style='max-height: 360px;'>
+                  </a><br>
+                </li>
+                <li><b>1.7 Execute this plan.</b> After creating an analysis plan, you may click the "Execute this plan" button. This takes you to <a href='#' class='executePipelineLink'>the plan execution page</a>. Proceed to the next step.
+                  <br><a href='./img/1_7_prepare_to_execute.png' data-lightbox="create-plan" data-title="Fill the metadata information adn save the created plan as a DataFile record." title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/1_7_prepare_to_execute.png" style='max-height: 220px;'>
+                  </a><br>
+                </li>
+              </ul>
+            </p>
+            <h2>Step 2. Execute an analysis plan</h2>
+            <p> 
+              This plan execution page can be accessed through clicking the "2. Execute a plan" link on the left menu, or <a href='#' class="executePipelineLink">clicking here to the page</a>.
+              Follow the instructions on this page to execute the plan. There are 4 steps to execute the plan as follows.
+              <ul>
+                <li><b>2.1 Select an analysis plan.</b>  The created plans in this project are listed in this page. Select one to proceed. Note that this step will be skipped if you clicked the "Go to plan execution page" button from the step 1.7. This is because that the created plan was automatically selected.</li>
+                <li><b>2.2 Check if the input folder is valid.</b>  Although you have configured the input folder containing raw sequence files in the step 1, it would be better to check if the folder content is correct. If the folder looks valid, click continue to proceed.
+                  <br><a href='./img/2_2_check_input_folder.png' data-lightbox="execute-plan" data-title="Check if the input folder is valid and contains the corrected sequence files." title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/2_2_check_input_folder.png" style='max-height: 360px;'>
+                  </a><br>
+                </li>
+                <li><b>2.3 Select parameters</b>  There are three parameters to set as the following figure. The first one is the reference organism. The references should be ready with the preparation stage (step 0). Here, choose the mouse or human organism.
+                  The second parameter is a cutoff to remove low abundance miRNA species. Although the DESeq2 recommended that we do not need to remove low abundance miRNA species, we provided 3 options to remove low abundance miRNA species.
+                  First, You may set the cutoff as the global mean to remove the miRNA species with lower read counts than the global mean. Second, a quantile cutoff value can be set between 0.01 ~ 0.99. Third, use an absolute read count number as the cutoff.
+                  The last parameter is an optional adapter sequence. If the adapter sequence is omitted, the cutadapt tool will try to guess the most possible adapter sequence. It is better to give the adapter sequence that generates the sequencing result.
+                  After setting all the three parameters, press the continue button to proceed.
+                  <br><a href='./img/2_3_set_parameters.png' data-lightbox="execute-plan" data-title="Set the parameters" title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/2_3_set_parameters.png" style='max-height: 480px;'>
+                  </a><br>
+                </li>
+                <li><b>2.4 Specify the metadata for the generated result record</b>  When executing a task or a workflow, a corresponding result will be generated and all the provenance of the result will be recorded. 
+                  The metadata of a result record contains the result name, the name prefix and suffix, and the result description. Filling the metadata information helps you to identify the results and their input parameters.
+                  <br><a href='./img/2_4_set_result_info.png' data-lightbox="execute-plan" data-title="Execute the plan and generate a corresponding Result record" title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/2_4_set_result_info.png" style='max-height: 360px;'>
+                  </a><br>
+                </li>
+              </ul>
+              Note that you may go to the "Plans in this project" button on the left menu or the "Plan list" link at the top.
+              The plan list page shows you all the plans created in this project and their corresponding execution histories as Result records.
+              Therefore, you do not need to wait until the workflow is finished. You can always find your workflow in this plan list. The list may be looked like the following figure.
+              <br><a href='./img/2_5_plan_list.png' data-lightbox="execute-plan" data-title="The list of plans and their corresponding results." title='click to enlarge this figure'>
+                <img class='img-fluid img-thumbnail' src="./img/2_5_plan_list.png" style='max-height: 480px;'>
+              </a><br>
+
+
+            </p>
+            <h2>Step 3. Visualize results interactively</h2>
+            <p>
+              When the workflow is running or finished, a corresponding result page is displayed. This result page corresponds to a result record generated from the step 2.4.
+              The result page contains 3 sections: 1) the metadata of the result record, 2) the workflow results, 3) the workflow execution progress.
+              The second section only shows when the workflow is successfully executed. This interactive result reports containing the 3 sections are shown as follows.
+              <ul>
+                <li><b>3.1. The metadata of the result record.</b>   The metadata specified in the step 2.4 will be shown here and helps you to identify the result.
+                  The analyzed folder of sequence data is also shown in this section. The information can be used to check if the results are expected without input errors.
+                  At the bottom of this sub-section, a "View the workflow process" link can link to the BDP built-in Result Page to display the workflow.
+                  When the workflow is successful executed, two additional buttons are shown and you can click them to view/download the final reports of PDF and the Excel files.
+                  <br><a href='./img/3_1_Result_metadata.png' data-lightbox="result-display" data-title="The metadata information of the result record." title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/3_1_Result_metadata.png" style='max-height: 260px;'>
+                  </a><br>
+                </li>
+                <li><b>3.2. Results</b>  This is the main workflow results and contains 5 sub-sections. This sub-section only shows when the workflow is successfully executed.
+                  <ul>
+                    <li><b>3.2.1. Quality controls</b>  The quality controls contain the tag length distributions for each sequence file, the fastQC reports for each sequence file, and an integrated MultiQC report.
+                      <br><a href='./img/3_2_1_quality_control.png' data-lightbox="result-display" data-title="The quality control of the sequence data" title='click to enlarge this figure'>
+                        <img class='img-fluid img-thumbnail' src="./img/3_2_1_quality_control.png" style='max-height: 360px;'>
+                      </a><br>
+                    </li>
+                    <li><b>3.2.2. Sample distances</b>  A principal component analysis plot and a two-dimensional hierarchical clustering plot are provided to allow examine the sample distance.
+                      For example, samples of technical repeats are expected to be clustered together, while samples from different conditions have longer distances.
+                      <br><a href='./img/3_2_2_sample_distances.png' data-lightbox="result-display" data-title="The PCA plot and a 2D-hierarchical clustering to show the distances among samples." title='click to enlarge this figure'>
+                        <img class='img-fluid img-thumbnail' src="./img/3_2_2_sample_distances.png" style='max-height: 360px;'>
+                      </a><br>
+                    </li>
+                    <li><b>3.2.3. Annotation summary reports</b>  The annotation summary report is generated by the bcgsc-mirna pipeline.
+                      This report describes the sequence mapping and annotation information such as the mapped ratio, adapter locations in the sequence reads, number of annotated miRNA species, etc.
+                      <br><a href='./img/3_2_3_annotation_summary.png' data-lightbox="result-display" data-title="The annotation summary table" title='click to enlarge this figure'>
+                        <img class='img-fluid img-thumbnail' src="./img/3_2_3_annotation_summary.png" style='max-height: 360px;'>
+                      </a><br>
+                    </li>
+                    <li><b>3.2.4. Top differential expressions</b>  A two-dimensional hierarchical cluster plot to show the top 80 variations of miRNA expressions across all samples. With this plot, you may observe if there is a clustering pattern of miRNA expressions in different conditions.
+                      <br><a href='./img/3_2_4_top_differential_expressions.png' data-lightbox="result-display" data-title="The top 80 miRNA species that have the highest variations of expressions across all samples. " title='click to enlarge this figure'>
+                        <img class='img-fluid img-thumbnail' src="./img/3_2_4_top_differential_expressions.png" style='max-height: 360px;'>
+                      </a><br>
+                    </li>
+                    <li><b>3.2.5. Pair-wise comparisons of differential expressions</b>   This sub-section may be repeated multiple times depending on the number of comparison contrasts which are defined in the step 1.5. 
+                      For each comparison, two plots and eight tables are displayed as follows.
+                      <ul>
+                        <li>A volcano plot shows the miRNA expressions of the two conditions. The cutoffs of the p-value and the positive/negative log2 fold changes can be set in the step 1.1.
+                          The miRNAs which pass the cutoffs are considered significant for downstream analysis.
+                        </li>
+                        <li>
+                          A bar plot displays the top 20 differential miRNA expressions of the positve and negative log2 fold changes. Significantly positive and negative changes are represented as dark red and dark green colors, respectively.
+                          For non-significant changes, light red and light green are used.
+                        </li>
+                        <a href='./img/3_2_5_volcano_plot_and_bar_plot.png' data-lightbox="result-display" data-title="The plots to display differences between the two conditions." title='click to enlarge this figure'>
+                          <img class='img-fluid img-thumbnail' src="./img/3_2_5_volcano_plot_and_bar_plot.png" style='max-height: 360px;'>
+                        </a><br>
+                        <li>
+                          Lists of significantly positive and negative miRNA expressions between the two conditions. This differential miRNA table is generated through the DESeq2 and contains the base mean values, log2 fold changes, the p-values, and adjusted p-values of the miRNA species.
+                        </li>
+                        <li>
+                          Lists of predicted targets of the positively and negatively expressed miRNAs. Based on the TargetScan reference file, target genes of these significantly differential miRNAs are extracted with the weighted context++ score percentile greater than 95.
+                        </li>
+                        <a href='./img/3_2_5_differential_expression_table.png' data-lightbox="result-display" data-title="The differential miRNA expression table." title='click to enlarge this figure'>
+                          <img class='img-fluid img-thumbnail' src="./img/3_2_5_differential_expression_table.png" style='max-height: 360px;'>
+                        </a><br>
+                        <li>
+                          The enrichment analyses of the predicted targets. The Gene Ontology and KEGG pathway enrichment is included to infer the possible effects of the differential miRNA expressions.
+                          <br><a href='./img/3_2_5_enrichment_analysis_table.png' data-lightbox="result-display" data-title="The differential miRNA expression table." title='click to enlarge this figure'>
+                            <img class='img-fluid img-thumbnail' src="./img/3_2_5_enrichment_analysis_table.png" style='max-height: 360px;'>
+                          </a><br>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul><br>
+                  The table data of the above result can be found in the Excel report file.
+                </li>
+                <li><b>3.3. Workflow execution timeline</b>   Once you execute the workflow from the step 2.4, a corresponding result record is generated to show the workflow progress. 
+                  A timeline shows you the current progress of the 15 workflow steps. Each time a step is finished, the related results (if any) can be displayed in this timeline.
+                  If you click the "View the process" buttons in each step, you can see the details of the task running in each workflow step.
+                  BDP keeps track of the result progres and records all the provenance of each task run.
+                  <br><a href='./img/3_3_workflow_progress.png' data-lightbox="workflow-progress" data-title="The differential miRNA expression table." title='click to enlarge this figure'>
+                    <img class='img-fluid img-thumbnail' src="./img/3_3_workflow_progress.png">
+                  </a><br>
+                </li>
+              </ul>
+
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      <strong>Copyright &copy; Chi Yang & Kuan-Fu Chen</strong> All rights reserved.
+    </div>
+    <!-- Default to the left -->
+    BDP miRNA Profiler
+  </footer>
+</div>
+<script src="./theme/js/adminlte.js" ></script>
+<script src="./scripts/main.js" ></script>
+<script>
+  const BdpAPI = new BdpPageAPI();
+  (async () => {
+    await BdpAPI.initialize();
+  })().catch(console.log);
+  $('#pageTitle').text('Documentation');
+</script>
+</body>
+</html>

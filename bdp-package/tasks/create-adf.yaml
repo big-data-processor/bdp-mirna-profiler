@@ -1,0 +1,24 @@
+- var:
+    mirBaseDB: "{{ argv[0] }}" #The database name for miRBase|list|mirna_21a,mirna_22b|||
+    mirBaseSpeciesShortName: "{{ argv[1] }}" #The species short name for miRBase|list|mmu,hsa|||
+    ucscGenomeRef: "{{ argv[2] }}" #The UCSC genome short name|list|mm10,hg38|||
+    theAdfFile: "{{ argv[3] }}" #The adf file|outFile|adf|adf|or|
+  task-template:
+    name: create-adf-file
+    image: "registry.gitlab.com/chiyang/bdp-bcgsc-mirna:0.3"
+    exec: /bin/bash
+    args:
+      - -c
+      - >-
+        perl /package/scripts/bcgsc-mirna-v0.2.7/code/custom_output/tcga/chi_create_adf.pl
+        -m
+        \"{{ var.mirBaseDB }}\"
+        -o
+        \"{{ var.mirBaseSpeciesShortName }}\"
+        -g
+        \"{{ var.ucscGenomeRef }}\"
+        -v
+        \"{{ var.mirBaseDB | suffix('-' + var.mirBaseSpeciesShortName + '-' + var.ucscGenomeRef) }}\"
+        > \"{{ var.theAdfFile | pathMapping }}\"
+    option:
+      net: host

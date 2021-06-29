@@ -1,0 +1,92 @@
+- var:
+    mysqlContainerName: "{{ argv[0] | trim }}"
+    mysqlRootPasswd: "{{ argv[1] | trim }}"
+    mysqlUSER: "{{ argv[2] | trim }}"
+    mysqlPASSWD: "{{ argv[3] | trim}}"
+    mysqlPORT: "{{ argv[4] | trim}}"
+    mysqlDBname: "{{ argv[5] | trim}}"
+    mysqlHost: "{{ argv[6] | trim}}"
+    dataInputFolder: "{{ path.resolve(argv[7]) | pathMapping(false) }}"
+    inputFileEncoding: "{{ argv[8] if argv[8] else 'latin1' }}"
+  task-template:
+    name: create-db
+    exec: docker
+    args:
+    - exec
+    - "{{ var.mysqlContainerName }}"
+    - "mysql"
+    - "-uroot"
+    - "-p{{ var.mysqlRootPasswd }}"
+    - "{% if var.mysqlDBname %}-e{% endif %}"
+    - "{% if var.mysqlDBname %}CREATE DATABASE IF NOT EXISTS {{ var.mysqlDBname }};GRANT ALL ON {{var.mysqlDBname}}.* TO '{{ var.mysqlUSER }}';{% endif %}"
+# Step 2: Allow old password (temporarily for my script to access mysql data.)
+- task-template:
+    name: alter-mysql-user
+    exec: docker
+    args:
+    - exec
+    - "{{ var.mysqlContainerName }}"
+    - "mysql"
+    - "-uroot"
+    - "-p{{ var.mysqlRootPasswd }}"
+    - "-e"
+    - "ALTER USER '{{ var.mysqlUSER }}' IDENTIFIED WITH mysql_native_password BY '{{ var.mysqlPASSWD }}';"
+# Step 3: Import all *.sql files
+- batch-items: "{{ var.dataInputFolder | listFromFileGlob(['*.sql']) | sort | dump}}"
+  task-template:
+    name: "import-{{ path.parse(item).name }}-sql"
+    exec: docker
+    args:
+    - run
+    - "--rm"
+    - "--link"
+    - "{{ var.mysqlContainerName }}:mysql"
+    - "-v"
+    - "{{ item | pathMapping(false) }}:/data/inputSQL.sql"
+    - "mysql:8.0"
+    - "sh"
+    - "-c"
+    - "exec mysql -h${MYSQL_PORT_3306_TCP_ADDR} -P${MYSQL_PORT_3306_TCP_PORT} -u{{ var.mysqlUSER }} -p{{ var.mysqlPASSWD }} {{ var.mysqlDBname }} < /data/inputSQL.sql"
+# Step 4: Decompress *.txt.gz and Import data into database
+- batch-items: >-
+    {% set fileStats = var.dataInputFolder | listFromFileGlob(['*.txt.gz']) | sort | fileStats %}
+    {% set fileNames = var.dataInputFolder | listFromFileGlob(['*.txt.gz']) | sort %}
+    {{ fileNames | _('zip', fileStats) | eval('data.filter(o => o[1].size <= 100000000)')  }}
+  task-template:
+    name: >-
+        {%- set tableName = path.basename(item[0], '.txt.gz') -%}
+        import-{{ tableName }}-data
+    exec: docker
+    args:
+    - run
+    - "--rm"
+    - "--link"
+    - "{{ var.mysqlContainerName }}:mysql"
+    - "-v"
+    - "{{ var.dataInputFolder }}:/data"
+    - "mysql:8.0"
+    - "sh"
+    - "-c"
+    - >-
+      gunzip -c -k {{ item[0] | pathMapping(var.dataInputFolder, '/data') }} > \"/data/{{ tableName }}.txt\" && 
+      mysql --local-infile -h${MYSQL_PORT_3306_TCP_ADDR} -P${MYSQL_PORT_3306_TCP_PORT} -u{{var.mysqlUSER}} -p{{var.mysqlPASSWD}} -e \"TRUNCATE {{var.mysqlDBname}}.{{tableName}}; Lock table {{var.mysqlDBname}}.{{tableName}} WRITE; load data local infile '/data/{{tableName}}.txt' into table {{var.mysqlDBname}}.{{ tableName }} CHARACTER SET {{ var.inputFileEncoding }}; UNLOCK TABLES;\" && rm -f \"/data/{{ tableName }}.txt\"
+# Step 5: Update the configs file
+- var:
+    mysqlHost: >- 
+      {%- if var.mysqlHost -%}{{ var.mysqlHost }}
+      {%- elif (os.platform() == 'win32' or os.platform() == 'darwin' ) -%}host.docker.internal
+      {%- else -%}172.17.0.1{%- endif -%}
+  task-template:
+    name: "update-configs"
+    exec: docker
+    args:
+    - run
+    - "--rm"
+    - "-v"
+    - "{{ path.resolve(option.packageFolder) | pathMapping(false) }}:/package"
+    - "busybox"
+    - "sh"
+    - "-c"
+    - >-
+      sed -i \"/^{{ var.mysqlDBname }}.*$/d\" /package/scripts/bcgsc-mirna-v0.2.7/config/db_connections.cfg &&
+      echo \"{{ var.mysqlDBname}} {{var.mysqlHost}} {{var.mysqlPORT}} {{var.mysqlUSER}} {{var.mysqlPASSWD}}\" >> /package/scripts/bcgsc-mirna-v0.2.7/config/db_connections.cfg

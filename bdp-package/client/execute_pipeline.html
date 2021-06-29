@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>BDP miRNA profiler</title>
+  <script src="https://cdn.jsdelivr.net/gh/big-data-processor/bdp-page-api/bdp-page-api.js"></script>
+  <!-- API -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+  
+  <!-- Vue -->
+  <script src="https://unpkg.com/vue-material"></script>
+  <!-- Vue material -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" 
+  integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" 
+  integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.1/dist/FileSaver.min.js"></script>
+  <!-- saveAS -->
+  <script src="https://unpkg.com/xlsx@0.14.2/dist/xlsx.full.min.js"></script>
+  <!-- sheetJS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  <!-- bootstrap -->
+  <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+  <script src="//polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+  <!-- <link rel="stylesheet" href="./styles/main.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+  
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- theme.css -->
+  
+  <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/theme/default.css">
+  <link rel="stylesheet" href="./theme/css/adminlte.min.css">
+  <link rel="stylesheet" href="./styles/main.css">
+  <!-- <link rel="stylesheet" href="./css/sel.css"> -->
+  <!-- CSS -->
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block homeLink">
+        <a href="#" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block docLink">
+        <a href="#" class="nav-link">Documentation</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block planListLink">
+        <a href="#" class="nav-link">Plan List</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block prepareProjectInfoLink">
+        <a href="#" class="nav-link">Create Plan</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block executePipelineLink">
+        <a href="#" class="nav-link text-info font-weight-bold">Run Plan</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class='nav-item'>
+        <a class="nav-link link refreshLink" role="button">
+          <i class="fas fa-sync-alt"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link pageListLink" role="button">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link toggleFullPageLink" role="button">
+          <i class="fas fa-expand-alt"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link">
+      <img src="/assets/img/BDP_VER0_7_4C_Black.svg" class="brand-image"
+        style="opacity: .8; width: 40px; margin-left: 5px;">
+      <span class="brand-text font-weight-light">BDP miRNA Profiler</span>
+    </a>
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-header">Current Project</li>
+          <li class='nav-item' id='currentProjectLink'></li>
+          <li class="nav-header">Introduction</li>
+          <li class='nav-item homeLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>Home</p>
+            </a>
+          </li>
+          <li class='nav-item docLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>Documentation</p>
+            </a>
+          </li>
+          <li class='nav-item planListLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-list"></i>
+              <p>Plans in this project</p>
+            </a>
+          </li>
+          <li class="nav-header">Run the workflow</li>
+          <li class='nav-item prepareProjectInfoLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tasks"></i>
+              <p>1. Create an analysis plan</p>
+            </a>
+          </li>
+          <li class='nav-item executePipelineLink'>
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-cogs fa-fw"></i>
+              <p>2. Execute a plan</p>
+            </a>
+          </li>
+          <li class="nav-header">Preparations</li>
+          <li class='nav-item prepareRefLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-download"></i>
+              <p>1. Download references</p>
+            </a>
+          </li>
+          <li class='nav-item dbPrepLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-database"></i>
+              <p>2. Prepare databases</p>
+            </a>
+          </li>
+          <li class='nav-item downloadExampleLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>3. Get example data</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+  <div class="content-wrapper">
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark" id='pageTitle'></h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item homeLink"><a href="#">Home</a></li>
+              <li class="breadcrumb-item">Run the workflow</li>
+              <li class="breadcrumb-item active">Execute the plan</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- content -->
+    <div class="content">
+      <div class="container">
+      <div id="formSecondaryProcess" class="stepView">
+        <template>
+          <div><md-steppers :md-active-step.sync="active" md-linear md-vertical>
+            <md-step id="selFileName" md-label="Select an analysis plan" :md-done.sync="selFileName" >
+              <h5 v-if="currentProjectFile === false" class="mt-1 text-secondary">Please select an analysis plan to execute.</h5>
+              <h5 v-if="currentProjectFile !== false" class="mt-1">You are selecting an analysis plan to execute.</h5>
+              <div class="row mt-3">
+                <template v-for="(item , index) in rawSeqFile">
+                  <div class='col-md-6 col-lg-4 col-xl-3' :class="{'d-none': currentProjectFile === false ? false : currentProjectFile !== index, 'btnProjectFile': index === currentProjectFile}">
+                    <div class='card card-outline' style='min-height: 240px;' :class="{'card-secondary': index !== currentProjectFile, 'card-primary': index === currentProjectFile}">
+                      <div class='card-header'>
+                        <b class='card-title'>
+                          <i class='fas fa-file fa-fw mr-2'></i>
+                          <u class="text-muted">{{item.prefix}}</u>{{ item.name }}<u class="text-muted">{{ item.suffix }}</u>
+                        </b>
+                      </div>
+                      <div class='card-body p-2'>
+                        <span class="mr-1 badge badge-primary" v-for="tag in item.tags">{{ tag }}</span><br>
+                        {{ item.desc ? (item.desc.slice(0, 80)) : '(no description)' }}
+                        <p><small class="text-left text-muted project-file-title">Created at {{ moment(new Date(item.updatedAt)).format('LTS, ll') }}</small></p>
+                      </div>
+                      <div class='card-footer p-2'>
+                        <button v-if="index !== currentProjectFile" class="btn btn-sm btn-primary" @click="selectProjectInfo(item,index)">Select</button>
+                        <button v-if="index === currentProjectFile" class="btn btn-sm btn-outline-danger" @click="cancelProjectInfoFile()">Cancel</button>
+                        <button class='btn btn-sm btn-info float-right ml-2' @click="navigateToFilePage(item.id, 'prepare-project-info')">
+                          <i class='fas fa-eye fa-fw'></i>
+                        </button>
+                        <button class='btn btn-sm btn-info float-right' @click="openFileLink(item.id)">
+                          <i class='fas fa-external-link-alt fa-fw'></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+              <hr>                  
+              <md-button class="md-raised md-primary" @click="selFileDone('selFileName', 'sequenceFolder')" :disabled="!selectprojectFile">Continue</md-button>
+            </md-step>
+            <md-step id="sequenceFolder" md-label="Check the selected folder containing raw sequence files"  :md-done.sync="sequenceFolder">
+              <div class="row">
+                <div class='col-12' v-if="backToProjectInfo === 'seqFold' && selectedSeqFolderObj">
+                  <div class="card card-outline card-primary mt-2" >
+                    <div class="card-header">
+                      <h3 class='card-title'>
+                      <b>
+                        <i class='fas fa-folder-open fa-fw mr-2'></i>
+                        <span class="text-muted" >{{selectedSeqFolderObj.prefix}}</span>
+                        {{ selectedSeqFolderObj.name }}
+                        <span class="text-muted">{{ selectedSeqFolderObj.suffix }}</span> 
+                      </b>
+                      </h3>
+                    </div>
+                    <div class="card-body text-left">
+                      <p >Tags : <span class="badge badge-success mr-1" v-for="item in selectedSeqFolderObj.tags">
+                        {{ item }}
+                      </span></p>
+                      <p>Description : {{selectedSeqFolderObj.desc || '(no description)' }}</p>
+                      <small class="card-text pr-0 mr-0">{{selectedSeqFolderObj.updatedAt}}</small>
+                    </div>
+                    <div class='card-footer'>
+                      <button class='btn btn-sm btn-info' @click="openFileLink(selectedSeqFolderObj.id)">
+                        <i class='fas fa-external-link-alt fa-fw'></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 my-3" v-if="backToProjectInfo === 'noResult' || !selectedSeqFolderObj">
+                  <div class="small-box bg-gradient-warning" v-if="selectprojectFile && !selectedSeqFolderObj">
+                    <div class="inner">
+                      <h4>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        You may have wrong settings in the selected analysis plan
+                      </h4>
+                      <p>We cannot find the raw sequence folder. This folder should be specified in the analysis plan.</p>
+                      <p>Click the button below to generate a new analysis plan from the current selected plan.</p>
+                    </div>
+                    <div class="icon">
+                      <i class="fas fa-search"></i>
+                    </div>
+                    <span class="small-box-footer" style='cursor: pointer; font-size: 24px; background-color: rgba(0, 0, 0, 0.7)' @click="backToMakeAnalysisPlan">
+                      Generate an analysis plan <i class="fas fa-arrow-circle-right"></i>
+                    </span>
+                  </div>
+                  <div class="small-box bg-gradient-warning" v-if="!selectprojectFile">
+                    <div class="inner">
+                      <h4>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        You haven't selected an analysis plan.
+                      </h4>
+                      Please click the link below to select a plan.
+                    </div>
+                    <div class="icon">
+                      <i class="fas fa-file"></i>
+                    </div>
+                    <span class="small-box-footer" style='cursor: pointer; font-size: 24px; background-color: rgba(0, 0, 0, 0.7)' @click="active = 'selFileName'">
+                      Go back to select an analysis plan <i class="fas fa-arrow-circle-right"></i>
+                    </span>
+                  </div>
+              </div>
+              </div>
+              <hr>
+              <md-button class="md-raised md-accent" @click="setReturn('selFileName','sequenceFolder')">Previous</md-button>
+              <md-button class="md-raised md-primary" @click="speciesDone('sequenceFolder', 'speciesData');" 
+              :disabled="backToProjectInfo === 'noResult' || !selectedSeqFolderObj">Continue</md-button>
+            </md-step>
+            <!-- <md-step id="species" md-label="Choose the organism" :md-done.sync="species">
+              <div class="row mt-3">
+                <div class="col-sm-6">
+                  <div class="info-box btn-outline-secondary border-0 pointHuman" :class="{'btnHuman': speciesSelID === 'Human'}"
+                  @click="speciesSelID = 'Human'">
+                    <span class="info-box-icon bg-humanLine">
+                      <i class="fas fa-child"></i>
+                    </span>
+                    <div class="info-box-content text-humanLine">
+                      <span class="info-box-text text-center">
+                        Human
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="info-box bg-mouseLine border-0" :class="{'btnMouse':speciesSelID === 'Mouse'}"
+                    @click="speciesSelID = 'Mouse'">
+                    <span class="info-box-icon bg-secondary">
+                      <i class="fas fa-mouse-pointer"></i>
+                    </span>
+                    <div class="info-box-content">
+                      <span class="info-box-text text-center">
+                        Mouse
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <md-button class="md-raised md-accent" @click="setReturn('sequenceFolder','species')">Previous</md-button>
+              <md-button class="md-raised md-primary" @click="speciesDone('species', 'speciesData')" :disabled="!speciesSelID">Continue</md-button>
+            </md-step> -->
+            <md-step id="speciesData" md-label="Set the parameters" :md-done.async="speciesData">
+              <div class="row"><div class='col-12'>
+                <div class="card card-outline card-primary">
+                  <div class="card-header d-flex p-0" :class="{'border-humanLine': speciesSelID === 'Human','border-mouseLine': speciesSelID === 'Mouse'}">
+                    
+                  </div>
+                  <div class="card-body">
+                    <h3 class="card-title p-3">1. Choose an organism</h3>
+                    <ul class="nav nav-pills mr-auto p-2">
+                      <li class="nav-item" @click="selectSpecies('Mouse')"><a class="nav-link active" href="#" data-toggle="tab">Mouse</a></li>
+                      <li class="nav-item" @click="selectSpecies('Human')"><a class="nav-link" href="#" data-toggle="tab">Human</a></li>
+                    </ul>
+                    <div>
+                      <ul>
+                        <li class="row d-flex align-items-center mt-2" v-if="!theReferenceFolder || !targetScanReferenceFile || !theKEGGPathwayFile || !theGenomeAnnotationFile || !theBiomaRtAnnotationTable">
+                          <h4 class="col-lg-7 text-danger"><i class="fas fa-exclamation-triangle mr-2"></i>Reference files for {{ speciesSelID }} are not found.</h4>
+                        </li>
+                        <li class="row">
+                          <p class="col-md-5 text-secondary">The reference folder: </span></p>
+                          <div class="col-md-7" >
+                            <div v-if="theReferenceFolder">
+                              <u>{{ theReferenceFolder.prefix }}</u>{{ theReferenceFolder.name || '(unnamed)' }}<u>{{ theReferenceFolder.suffix }}</u>
+                              <span v-if="refFromPublicProject">from the public project</span>
+                              <i class='link fas fa-external-link-alt fa-fw ml-2' @click="openFileLink(theReferenceFolder.id)"></i>
+                            </div>
+                            <span v-else="theReferenceFolder">
+                              <span class="badge  badge-light lackSpceiesData"><i class="fas fa-exclamation-circle text-warning mr-2" ></i>No file</sapn>
+                            </span>
+                          </div>
+                        </li>
+                        <li class="row bg-light">
+                          <p class="col-md-5 text-secondary">The database name for miRBase:</p>
+                          <p class="col-md-7">
+                            <span>{{ theDatabaseNameForMiRBase }}</span>
+                          </p>
+                        </li>
+                        <li class="row pb-0">
+                          <p class="col-md-5 text-secondary">The species short name for miRBase: </p>
+                          <p class="col-md-7">
+                            <span>{{ theSpeciesShortNameForMiRBase }}</span>
+                          </p>
+                        </li>
+                        <li class="row bg-light">
+                          <p class="col-md-5 text-secondary">The UCSC genome short name: </p>
+                          <p class="col-md-7">
+                            <span>{{ theUCSCGenomeShortName }}</span>
+                          </p>
+                        </li>
+                        <li class="row">
+                          <p class="col-md-5 text-secondary">TargetScan reference file: </span></p>
+                          <p class="col-md-7">
+                            <span v-if="targetScanReferenceFile">
+                              <u>{{ targetScanReferenceFile.prefix }}</u>{{ targetScanReferenceFile.name || '(unnamed)' }}<u>{{ targetScanReferenceFile.suffix }}</u>
+                              <i class='link fas fa-external-link-alt fa-fw ml-2' @click="openFileLink(targetScanReferenceFile.id)"></i>
+                            </span>
+                            <span v-else="targetScanReferenceFile">
+                              <span class="badge  badge-light lackSpceiesData"><i class="fas fa-exclamation-circle text-warning mr-2" ></i>No file</sapn>
+                            </span>
+                          </p>
+                        </li>
+                        <li class="row bg-light">
+                          <p class="col-md-5 text-secondary">The KEGG pathway file: </span></p>
+                          <p class="col-md-7" >
+                            <span v-if="theKEGGPathwayFile">
+                              <u>{{ theKEGGPathwayFile.prefix }}</u>{{ theKEGGPathwayFile.name || '(unnamed)' }}<u>{{ theKEGGPathwayFile.suffix }}</u>
+                              <i class='link fas fa-external-link-alt fa-fw ml-2' @click="openFileLink(theKEGGPathwayFile.id)"></i>
+                            </span>
+                            <span v-else="theKEGGPathwayFile">
+                              <span class="badge   lackSpceiesData"><i class="fas fa-exclamation-circle text-warning mr-2"></i>No file</sapn>
+                            </span>
+                          </p>
+                        </li>
+                        <li class="row ">
+                          <p class="col-md-5 text-secondary">The genome annotation file (GTF): </span></p>
+                          <p class="col-md-7" >
+                            <span v-if="theGenomeAnnotationFile">
+                              <u>{{ theGenomeAnnotationFile.prefix }}</u>{{ theGenomeAnnotationFile.name || '(unnamed)'}}<u>{{ theGenomeAnnotationFile.suffix }}</u>
+                              <i class='link fas fa-external-link-alt fa-fw ml-2' @click="openFileLink(theGenomeAnnotationFile.id)"></i>
+                            </span>
+                            <span v-else="theGenomeAnnotationFile">
+                              <span class="badge  badge-light lackSpceiesData"><i class="fas fa-exclamation-circle text-warning mr-2"></i>No file</sapn>
+                            </span>
+                          </p>
+                        </li>
+                        <li class="row bg-light">
+                          <p class="col-md-5 text-secondary">The biomaRt annotation table: </span></p>
+                          <p class="col-md-7">
+                            <span v-if="theBiomaRtAnnotationTable">
+                              <u>{{ theBiomaRtAnnotationTable.prefix }}</u>{{ theBiomaRtAnnotationTable.name }}<u>{{ theBiomaRtAnnotationTable.suffix }}</u>
+                              <i class='link fas fa-external-link-alt fa-fw ml-2' @click="openFileLink(theBiomaRtAnnotationTable.id)"></i>
+                            </span>
+                            <span v-else="theBiomaRtAnnotationTable">
+                              <span class="badge   lackSpceiesData"><i class="fas fa-exclamation-circle text-warning mr-2" ></i>No file</sapn>
+                            </span>
+                          </p>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <h3 class='card-title p-3'>2. Set the cutoff to remove low abundance miRNA species</h3><br>
+                    <div style='clear: both'>
+                      <ul>
+                        <li class="row">
+                          <div class="col-md-12 d-flex ">
+                            <div class='justify-content-center align-items-center'>
+                              <button class="btn btn-outline-primary btn-sm" @click="removeValue('notRemove')" :class="{'active': activeBtn==='notRemove'}">No Removal</button>
+                              <button class="btn btn-outline-secondary btn-sm" @click="removeValue('globalMean')" :class="{'active':activeBtn==='globalMean'}">By global mean</button>
+                              <button class="btn btn-outline-success btn-sm" @click="removeValue('quantile')" :class="{'active':activeBtn==='quantile'}">By quantile value</button>
+                              <button class="btn btn-outline-info btn-sm" @click="removeValue('absoluteCutoff')" :class="{'active':activeBtn==='absoluteCutoff'}">By absolute readcount</button>
+                            </div>
+                          </div>
+                        </li>
+                        <li class='row' v-if="activeBtn==='quantile' || activeBtn==='absoluteCutoff'">
+                          <div class="col-md-12 py-2">
+                            <span v-if="activeBtn==='quantile'">
+                              <input type="text" v-model="amountValue" class="text-center bg-white" />
+                              <input v-model="amountValue" type="range" min="0.01" max="0.99" step="0.01"></input>
+                            </span>
+                            <span v-if="activeBtn==='absoluteCutoff'">
+                              <input type="number" v-model.lazy="absoluteAmountValue"  class="valueformcontrol text-center bg-white">
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    <h3 class='card-title p-3'>3. (Optional) The adapter sequence:</h3>
+                    <div style='clear: both'>
+                      <ul>
+                        <li class="row bg-light d-flex align-items-center">
+                          <div class="col-12"><input type="text" class="form-control" v-model="adapterSequence"></div>
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4>Haven't prepared references?</h4>
+                      Click <a class='link' @click="navigateToProjectPage('prepare-references')">here</a> to download the reference files for organisms of human and mouse.<br>
+                      Click <a class='link' @click="navigateToProjectPage('db-prepare')">here</a> to import the downloaded reference files into a MySQL database instance.
+                    </div>
+                  </div>
+                </div>
+              </div></div>
+              <md-button class="md-raised md-accent" @click="setReturn('sequenceFolder','speciesData')">Previous</md-button>
+              <md-button class="md-raised md-primary" @click="setSpeciesData('speciesData','finishSpeciesForm')" 
+              :disabled="!theReferenceFolder || !targetScanReferenceFile || !theKEGGPathwayFile || !theGenomeAnnotationFile || !theBiomaRtAnnotationTable">Continue</md-button>
+            </md-step>
+            <md-step id="finishSpeciesForm" md-label="Set the result information" :md-done.sync="finishSpeciesForm">
+              <div class="card card-success">
+                <div class="card-header">
+                  <div class="card-title">Fill the result information</div>
+                </div>
+                <div class="card-body row">
+                  <div class="col-xl-3 col-md-6">
+                    <label class="labelText">Analysis Plan (project-info):</label>
+                  </div>
+                  <div class="col-xl-3 col-md-6 mb-1">
+                    <template v-if="selectprojectFile">
+                      <span class="text-muted">{{ selectprojectFile.prefix }}</span>
+                      <span class="text-block">{{ selectprojectFile.name }}</span> 
+                      <span class="text-muted">{{ selectprojectFile.suffix }}</span>
+                    </template>
+                  </div>
+                  <div class="col-xl-3 col-md-6">
+                    <label class="labelText">Folder containing the raw sequences (raw-sequence):</label>
+                  </div>
+                  <div class="col-xl-3 col-md-6 mb-1">
+                    <span v-if="selectedSeqFolderObj"> {{ selectedSeqFolderObj.prefix}} {{ selectedSeqFolderObj.name }} {{ selectedSeqFolderObj.suffix }}</span>
+                    <span v-else="selectedSeqFolderObj" class='text-danger'>No folder found</span>
+                  </div>
+                  <div class="col-xl-3 col-md-6">
+                    <label class="labelText">Species :</label>
+                  </div>
+                  <div class="col-xl-3 col-md-6 mb-1">
+                    <span >{{ speciesSelID }}</span>
+                  </div>
+                  <div class="col-xl-3 col-md-6">
+                    <label class="labelText" for="prefix">Result name prefix:</label>
+                  </div>
+                  <div class="col-xl-3 col-md-6 mb-1">
+                    <input id="prefix" type="text" class="form-control" v-model="excuteTaskPrefix">
+                  </div>
+                  <div class="col-xl-3 col-md-6">
+                    <label class="labelText text-primary" for="fileName">*Result name (required):</label>
+                  </div>
+                  <div class="col-xl-3 col-md-6 mb-1">
+                    <input id="fileName" type="text" class="form-control" v-model="excuteTaskName">
+                  </div>
+                  
+                  <div class="col-xl-3 col-md-6">
+                    <label class="labelText" for="suffix">Result name suffix:</label>
+                  </div>
+                  <div class="col-xl-3 col-md-6 mb-1">
+                    <input id="suffix" type="text" class="form-control" v-model="excuteTaskSuffix">
+                  </div>
+                  <div class="col-12">
+                    <label class="labelText" for="description">Description:</label>
+                  </div>
+                    <textarea id="description"  rows="3" class="form-control" v-model="excuteTaskDesc"></textarea>
+                </div>
+              </div>
+              <hr>
+              <div v-if="!selectprojectFile || !selectedSeqFolderObj" class="alert alert-warning alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h5><i class="icon fas fa-exclamation-triangle"></i> You have unselected parameters.</h5>
+                <ul>
+                  <li v-if="!selectprojectFile">You have NOT specify an analysis plan. click <a class='link' @click="active = 'selFileName'">here</a> to select an analysis plan.</li>
+                  <li v-if="!selectedSeqFolderObj">The folder containing the raw sequencing data is not found. Perhaps the folder has been deleted or the analysis plan is incorrectly set. Click <a class='link' @click="backToMakeAnalysisPlan">here</a> to create an analysis plan. </li>
+                </ul>
+              </div>
+              <!-- this.excuteTaskName && this.selectedSeqFolderObj.id && this.projectInfoFile && this.speciesSelID -->
+              <div class="d-flex justify-content-center">
+                <md-button class="md-raised md-accent" @click="setReturn('speciesData','finishSpeciesForm')">Previous</md-button>
+                <md-button class="md-raised md-primary" @click="finishSpeciesDone('finishForm')" :disabled="confirmDataDisabled">Execute this plan</md-button>
+              </div>
+            </md-step>
+          </md-steppers></div>
+        </template>
+      </div>
+      </div>
+    </div>
+    <!--  -->
+  </div>
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      <strong>Copyright &copy; Chi Yang & Kuan-Fu Chen</strong> All rights reserved.
+    </div>
+    <!-- Default to the left -->
+    BDP miRNA Profiler
+  </footer>  
+</div>
+
+<script src="./theme/js/adminlte.min.js"></script>
+<!-- <script src="./form.js"></script> -->
+<script src="./scripts/main.js" ></script>
+<script src="./scripts/execute_pipeline.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+- task-template:
+    name: "code-page-ide"
+    image: "registry.gitlab.com/chiyang/bdp-page-development:3.8.0"
+    exec: " "
+    args:
+      - --auth
+      - none
+      - --disable-telemetry
+    option:
+      #skipProject: true,
+      skipPackage: true,
+      volumeMappings:
+        - "{{ env.PACKAGE_FOLDER }}/scripts:/home/coder/project/scripts"
+        - "{{ env.PACKAGE_FOLDER }}/client:/home/coder/project/pages"
+      workdir: "/home/coder/project"
+    proxy:
+      containerPort: 8080
+

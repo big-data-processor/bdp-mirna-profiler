@@ -1,0 +1,10 @@
+- var:
+    theMiRBaseFolder: "{{ argv[0] }}" #The miRBase folder|outFile|Folder,mirbase,data-to-import|Folder|or|
+  task-template:
+    name: "copy-mirbase"
+    image: "busybox"
+    exec: "cp"
+    args:
+      - '-r'
+      - "/package/scripts/mirBase_22_1"
+      - "{{ var.theMiRBaseFolder | pathMapping }}"

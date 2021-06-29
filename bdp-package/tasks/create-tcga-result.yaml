@@ -1,0 +1,21 @@
+- var:
+    mirBaseDB: "{{ argv[0] }}" #The database name for miRBase|list|mirna_21a,mirna_22b|||
+    mirBaseSpeciesShortName: "{{ argv[1] }}" #The species short name for miRBase|list|mmu,hsa|||
+    ucscGenomeRef: "{{ argv[2] }}" #The UCSC genome short name|list|mm10,hg38|||
+    theProjectFolder: "{{ argv[3] }}" #The project folder|inFile|Folder,seq-project|Folder|or|
+  task-template:
+    name: create-tcga-results
+    image: "registry.gitlab.com/chiyang/bdp-bcgsc-mirna:0.3"
+    exec: perl
+    args:
+      - /package/scripts/bcgsc-mirna-v0.2.7/code/custom_output/tcga/tcga.pl
+      - -m
+      - "{{ var.mirBaseDB }}"
+      - -o
+      - "{{ var.mirBaseSpeciesShortName }}"
+      - -g
+      - "{{ var.ucscGenomeRef }}"
+      - -p
+      - "{{ var.theProjectFolder | pathMapping }}"
+    option:
+      net: host

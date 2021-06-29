@@ -1,0 +1,6 @@
+- task-template:
+    name: "start-mysql-container"
+    exec: "docker"
+    args:
+      - start
+      - "{{ argv[0] }}"

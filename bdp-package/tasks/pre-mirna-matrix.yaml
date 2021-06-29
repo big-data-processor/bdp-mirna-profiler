@@ -1,0 +1,18 @@
+- var:
+    theDatabaseNameForMiRBase: "{{ argv[0] }}" #The database name for miRBase|list|mirna_21a,mirna_22b|||
+    theSpeciesShortNameForMiRBase: "{{ argv[1] }}" #The species short name for miRBase|list|mmu,hsa|||
+    theProjectFolder: "{{ argv[2] }}" #The project folder|inFile|Folder,seq-project|Folder|or|
+  task-template:
+    name: premirna-matrix
+    image: "registry.gitlab.com/chiyang/bdp-bcgsc-mirna:0.3"
+    exec: perl
+    args:
+      - /package/scripts/bcgsc-mirna-v0.2.7/code/library_stats/expression_matrix.pl
+      - -m
+      - "{{ var.theDatabaseNameForMiRBase }}"
+      - -o
+      - "{{ var.theSpeciesShortNameForMiRBase }}"
+      - -p
+      - "{{ var.theProjectFolder | pathMapping }}"
+    option:
+      net: host

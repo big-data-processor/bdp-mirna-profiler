@@ -1,0 +1,18 @@
+- var:
+    trimmedSeqFolder: "{{ argv[0] }}" #The input folder containing trimmed.fa and trimmed.sai|inFile|Folder,trimmed-seq|Folder|and|
+    refGenomeFolder: "{{ argv[1] }}" #The reference genome folder|inFile|Folder,genome,indexed,bwa|Folder|and|
+  batch-items: >-
+    {% set saiFiles =  var.trimmedSeqFolder | listFromFileGlob(['*.sai']) | sort  %}
+    {% set fqFiles =  var.trimmedSeqFolder | listFromFileGlob(['*_trimmed.fq']) | sort  %}
+    {{ saiFiles | _('zip', fqFiles) | dump }}
+  task-template:
+    name: get-sam-files
+    image: quay.io/biocontainers/bwa:0.7.17--ha92aebf_3
+    exec: bwa
+    args:
+    - samse
+    - -f
+    - "{{ var.trimmedSeqFolder | suffix('/' + path.basename(item[0], '.sai') + '.sam') | pathMapping }}" #The output sam file (*.sam)
+    - "{{ var.refGenomeFolder | listFromFileGlob(['*.fa']) | sort | first | pathMapping }}" # The refgenome.fa inside argv[1]
+    - "{{ item[0] | pathMapping}}" # item[0]>> The trimmed sai file.
+    - "{{ item[1] | pathMapping}}" # item[1]>> The trimmed fastq file.

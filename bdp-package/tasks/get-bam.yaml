@@ -1,0 +1,23 @@
+- var:
+    trimmedSeqFolder: "{{ argv[0] }}" #The input folder (containing sam files)|inFile|Folder,trimmed-seq|Folder|and|
+  batch-items: "{{ var.trimmedSeqFolder | listFromFileGlob(['*.sam']) | sort }}"
+  task-template:
+    name: get-bam
+    image: quay.io/biocontainers/samtools:1.9--h46bd0b3_0
+    exec: samtools
+    args:
+    - view
+    - -b
+    - "{{ item | pathMapping }}" # The input sam file
+    - -o
+    - "{{ path.parse(item).dir | suffix('/' + path.parse(item).name + '.bam') | pathMapping}}" # The output bam file in the same folder
+#- batch-items: "{{ var.trimmedSeqFolder | listFromFileGlob(['*.sam']) | sort }}"
+#  task-template:
+#    name: generate-bam-index
+#    image: quay.io/biocontainers/samtools:1.9--h46bd0b3_0
+#    exec: samtools
+#    args:
+#      - "index"
+#      - "{{ path.parse(item).dir | suffix('/' + path.parse(item).name + '.bam') | pathMapping}}"
+#      - "{{ path.parse(item).dir | suffix('/' + path.parse(item).name + '.bai') | pathMapping}}"
+

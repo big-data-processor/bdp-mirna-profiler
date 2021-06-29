@@ -1,0 +1,13 @@
+- var:
+    theTcgaLevel3Folder: "{{ argv[0] }}" #The TCGA level3 folder|inFile|Folder,tcga-level3|Folder|and|
+    theDatabaseNameForMiRBase: "{{ argv[1] }}" #The database name for miRBase|list|mirna_21a,mirna_22b|||
+  task-template:
+    name: convert-to-mature-id
+    image: "registry.gitlab.com/chiyang/bdp-bcgsc-mirna:0.3"
+    exec: node
+    args:
+      - /package/scripts/convertToMatureRNA.js
+      - "{{ var.theTcgaLevel3Folder | pathMapping }}"
+      - "{{ var.theDatabaseNameForMiRBase }}"
+    option:
+      net: host

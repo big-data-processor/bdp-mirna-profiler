@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>BDP miRNA profiler</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="./theme/css/adminlte.min.css">
+  <link rel="stylesheet" href="./styles/main.css">
+  <script src="https://cdn.jsdelivr.net/gh/big-data-processor/bdp-page-api/bdp-page-api.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block homeLink">
+        <a href="#" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block docLink">
+        <a href="#" class="nav-link">Documentation</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block planListLink">
+        <a href="#" class="nav-link">Plan List</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block prepareProjectInfoLink">
+        <a href="#" class="nav-link">Create Plan</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block executePipelineLink">
+        <a href="#" class="nav-link">Run Plan</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class='nav-item'>
+        <a class="nav-link link refreshLink" role="button">
+          <i class="fas fa-sync-alt"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link pageListLink" role="button">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link toggleFullPageLink" role="button">
+          <i class="fas fa-expand-alt"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+      <img src="/assets/img/BDP_VER0_7_4C_Black.svg" class="brand-image" style="opacity: .8; width: 40px; margin-left: 5px;">
+      <span class="brand-text font-weight-light">BDP miRNA Profiler</span>
+    </a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-header">Current Project</li>
+          <li class='nav-item' id='currentProjectLink'></li>
+          <li class="nav-header">Introduction</li>
+          <li class='nav-item homeLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>Home</p>
+            </a>
+          </li>
+          <li class='nav-item docLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>Documentation</p>
+            </a>
+          </li>
+          <li class='nav-item planListLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-list"></i>
+              <p>Plans in this project</p>
+            </a>
+          </li>
+          <li class="nav-header">Run the workflow</li>
+          <li class='nav-item prepareProjectInfoLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tasks"></i>
+              <p>1. Create an analysis plan</p>
+            </a>
+          </li>
+          <li class='nav-item executePipelineLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-cogs fa-fw"></i>
+              <p>2. Execute a plan</p>
+            </a>
+          </li>
+          <li class="nav-header">Preparations</li>
+          <li class='nav-item prepareRefLink'>
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-file-download"></i>
+              <p>1. Download references</p>
+            </a>
+          </li>
+          <li class='nav-item dbPrepLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-database"></i>
+              <p>2. Prepare databases</p>
+            </a>
+          </li>
+          <li class='nav-item downloadExampleLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>3. Get example data</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <div class="content-wrapper" id='vue-app'>
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark" id='pageTitle'>Reference Preparation <i class='fas fa-sync-alt ml-2 link' @click="refresh"></i></h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item homeLink"><a href="#">Home</a></li>
+              <li class="breadcrumb-item">Preparations</li>
+              <li class="breadcrumb-item active">Reference preparations</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="container">
+        <div class='row' v-if="orgRefPublished.mouse || orgRefPublished.human">
+          <div class='col-12'>
+            <h3>References are prepared in the public project.  <i class='fas fa-external-link-alt link' @click="openProjectLink(thePublicProject.id)"></i></h3>
+            <p>The reference files of the following organisms are globally availabe for all projects. You don't need to prepare those references!</p>
+          </div>
+          <div class='col-6' v-if="orgRefPublished.mouse">
+            <div class='card card-info bg-info'>
+              <div class='card-header'>
+                <i class='fas fa-check fa-fw'></i> <b>Mouse</b>
+              </div>
+              <div class='card-footer'>
+                The reference files for the Mouse are prepared.
+              </div>
+            </div>
+          </div>
+          <div class='col-6' v-if="orgRefPublished.human">
+            <div class='card card-warning bg-warning'>
+              <div class='card-header'>
+                <i class='fas fa-check fa-fw'></i> <b>Human</b>
+              </div>
+              <div class='card-footer'>
+                The reference files for the Human are prepared.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id='preparedRefContainer' class='row' v-if="preparedReferences.length > 0">
+          <div class='col-12'>
+            <h4>You have prepared references in this project. <i class='fas fa-sync-alt ml-2 link' @click="refresh"></i></h4>
+            <span class='text-muted'>*Once you have exported the references to the public project. These reference files are globally avaialbe for all projects.</span>
+          </div>
+          <div class='col-sm-6 col-md-4' v-for="result in preparedReferences">
+            <div class='card'>
+              <div class="card-header">
+                <h3 class="card-title"><u class='text-muted'>{{result.prefix}}</u>{{result.name}}<u class='text-muted'>{{result.suffix}}</u></h3>
+              </div>
+              <div class="card-body">
+                Status: 
+                <template v-if="result.status == 0"><i class='fas fa-hourglass-half fa-fw text-info mr-2'></i>job is queued, please wait.</template>
+                <template v-if="result.status == 1"><i class='fas fa-circle-notch fa-fw fa-spin text-primary mr-2'></i>job is running, please wait.</template>
+                <template v-if="result.status == 2"><i class='fas fa-check fa-fw text-success mr-2'></i>job is finished</template>
+                <template v-if="result.status == 3"><i class='fas fa-times fa-fw text-danger mr-2'></i>job has failed</template>
+                <template v-if="result.status == 4"><i class='fas fa-trash-alt fa-fw text-warning mr-2'></i>job is deleting</template>
+                <br>
+                Description: {{result.desc || '(no description)' }}<br>
+                <button class="btn btn-info" @click="openResultLink(result.id)"><i class='fas fa-external-link-alt fa-fw mr-2'></i>View the preparing process</button><br><br>
+              </div>
+              <div class="card-footer">
+                <button v-if="result.status === 2" :disabled="isReferenceExported[result.id] !== 0" class="btn"
+                  :class="{'btn-primary': isReferenceExported[result.id] < 2, 'btn-success': isReferenceExported[result.id] === 2 }"
+                  @click="exportToPublicProject(result)"
+                >
+                  <i v-if="isReferenceExported[result.id] === 0" class='fas fa-file-export fa-fw'></i>
+                  <i v-if="isReferenceExported[result.id] === 1" class='fas fa-circle-notch fa-spin fa-fw'></i>
+                  <i v-if="isReferenceExported[result.id] === 2" class='fas fa-check fa-fw'></i>
+                </button>
+                <template v-if="result.status === 2">
+                  <span v-if="isReferenceExported[result.id] === 2">References were published.</span>
+                  <span v-if="isReferenceExported[result.id] === 1">References are publishing.</span>
+                  <span v-if="isReferenceExported[result.id] === 0">Export to the public project</span>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class='row'>
+          <div class='col-12'>
+            <h4>Prepare a new set of references</h4>
+            <div class="card card-outline" id="selectContainer" :class="{'card-warning': selectedOrg === 'human', 'card-info': selectedOrg === 'mouse'}">
+              <div class="card-header d-flex p-0">
+                <h3 class="card-title p-3">Choose the organism</h3>
+                <ul class="nav nav-pills ml-auto p-2">
+                  <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab" @click="selectOrg('mouse')">Mouse</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab" @click="selectOrg('human')">Human</a></li>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                  </div>
+                </ul>
+              </div><!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                    <h4>Downloaded references for Mouse: </h4>
+                    <span class='text-muted'>Note: the mouse sequencing datasets are used as our demonstration.</span><br>
+                    <div class="callout callout-info">
+                      <h5>KEGG pathways</h5>
+                      <p>Download from <a href='http://rest.kegg.jp/list/pathway/mmu' target=_blank>http://rest.kegg.jp/list/pathway/mmu</a></p>
+                    </div>
+                    <div class="callout callout-info">
+                      <h5>miRNA targets</h5>
+                      <p>Download from <a href='http://www.targetscan.org/mmu_72/' target=_blank>TargetScan Mouse v72</a></p>
+                    </div>
+                    <div class="callout callout-info">
+                      <h5>Genome references</h5>
+                      <p>The MySQL database from <a href='https://hgdownload.cse.ucsc.edu/goldenPath/mm10/database/' target=_blank>UCSC (mm10)</a></p>
+                    </div>
+                    <div class="callout callout-info">
+                      <h5>Genome sequences</h5>
+                      <p>The genomic sequences from <a href='https://hgdownload.cse.ucsc.edu/goldenPath/mm10/bigZips/' target=_blank>UCSC (mm10)</a></p>
+                    </div>
+                    <div class="callout callout-info">
+                      <h5>Genome annotations</h5>
+                      <p>The gene annotations from <a href='http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/' target=_blank>GENCODE Release M25</a></p>
+                    </div>
+                    <div class="callout callout-info">
+                      <h5>Gene Ontology</h5>
+                      <p>The GO terms from <a href='http://apr2020.archive.ensembl.org/index.html' target=_blank>Ensembl 100: Apr 2020 (GRCh38.p13) - patched/updated gene set Jun 2019</a></p>
+                    </div>
+                    <div class="callout callout-info">
+                      <h5>miRBase</h5>
+                      <p>The MySQL database from <a href='http://www.mirbase.org/' target=_blank>miRBase v22.1</a></p>
+                    </div>
+                  </div>
+                  <!-- /.tab-pane -->
+                  <div class="tab-pane" id="tab_2">
+                    <h4>Downloaded references for Human: </h4>
+                    <div class="callout callout-warning">
+                      <h5>KEGG pathways</h5>
+                      <p>Download from <a href='http://rest.kegg.jp/list/pathway/hsu' target=_blank>http://rest.kegg.jp/list/pathway/hsu</a></p>
+                    </div>
+                    <div class="callout callout-warning">
+                      <h5>miRNA targets</h5>
+                      <p>Download from <a href='http://www.targetscan.org/vert_72/' target=_blank>TargetScan Human v72</a></p>
+                    </div>
+                    <div class="callout callout-warning">
+                      <h5>Genome references</h5>
+                      <p>The MySQL database from <a href='https://hgdownload.cse.ucsc.edu/goldenPath/hg38/database/' target=_blank>UCSC (hg38)</a></p>
+                    </div>
+                    <div class="callout callout-warning">
+                      <h5>Genome sequences</h5>
+                      <p>The genomic sequences from <a href='https://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/' target=_blank>UCSC (hg38)</a></p>
+                    </div>
+                    <div class="callout callout-warning">
+                      <h5>Genome annotations</h5>
+                      <p>The gene annotations from <a href='http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/' target=_blank>GENCODE Release 35</a></p>
+                    </div>
+                    <div class="callout callout-warning">
+                      <h5>Gene Ontology</h5>
+                      <p>The GO terms from <a href='http://apr2020.archive.ensembl.org/index.html' target=_blank>Ensembl 100: Apr 2020 (GRCh38.p13) - patched/updated gene set Jun 2019</a></p>
+                    </div>
+                    <div class="callout callout-warning">
+                      <h5>miRBase</h5>
+                      <p>The MySQL database from <a href='http://www.mirbase.org/' target=_blank>miRBase v22.1</a></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class='card-footer'>
+                <span>You have selected the <b>{{ selectedOrg === 'mouse' ? 'Mouse' : 'Human' }}</b> organism.</span>
+                <button class="btn btn-info float-right" :disabled="isRunning" @click="downloadRef">Proceed</button>
+              </div>
+            </div>
+          </div>
+          <div id='taskExeMsgDiv' v-if="theCurrentResult" class='col-12' style='display: none;'>
+            <div class="card">
+              <div class="card-header d-flex p-0">
+                <h3 class="card-title p-3" id='taskExeTitle'>Preparing References
+                  <button class='btn btn-outline-primary ml-2' @click="openResultLink(theCurrentResult.id)"><i class='fas fa-external-link-alt fa-fw'></i></button></h3>
+                <ul class="nav nav-pills ml-auto p-2">
+                  <li class="nav-item"><a class="nav-link" href="#stdoutTab" data-toggle="tab">Standard output</a></li>
+                  <li class="nav-item"><a class="nav-link active" href="#stderrTab" data-toggle="tab">Standard error</a></li>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                  </div>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade" id="stdoutTab" role="tabpanel" aria-labelledby="stdoutTab" style='max-height: 400px; overflow: auto;'>
+                      <pre style='width: 100%; font-size: 8pt;'>{{ stdoutText }}</pre>
+                  </div>
+                  <div class="tab-pane fade show active" id="stderrTab" role="tabpanel" aria-labelledby="stderrTab" style='max-height: 400px; overflow: auto;'>
+                      <pre style='width: 100%; font-size: 8pt;'>{{ stderrText }}</pre>
+                  </div>
+                </div>
+              </div>
+              <div class='card-footer'>
+                <span>You have selected the <b>Mouse</b> organism.</span>
+                <span :innerHTML="taskExeFooter"></span>
+                <button class="btn btn-danger float-right" @click="stopResult()" :disabled="theCurrentResult.status === 2 || isStopping">
+                  <span v-if="isStopping">Stopping<i class='fas fa-circle-notch fa-fw fa-spin ml-2'></i></span>
+                  <span v-if="!isStopping">Stop</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      <strong>Copyright &copy; Chi Yang</strong> All rights reserved.
+    </div>
+    <!-- Default to the left -->
+    BDP miRNA Profiler
+  </footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+<script src="./theme/js/adminlte.js" ></script>
+<script src="./scripts/main.js" ></script>
+<script src="./scripts/download_references.js" ></script>
+</body>
+</html>

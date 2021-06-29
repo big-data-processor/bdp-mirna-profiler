@@ -1,0 +1,10 @@
+- var:
+    theProjectFolder: "{{ argv[0] }}" #The project folder|inFile|Folder,seq-project|Folder|or|
+  task-template:
+    name: make-graph-summary
+    image: "registry.gitlab.com/chiyang/bdp-bcgsc-mirna:0.3"
+    exec: perl
+    args:
+      - /package/scripts/bcgsc-mirna-v0.2.7/code/library_stats/graph_libs.pl
+      - -p
+      - "{{ var.theProjectFolder | pathMapping }}"

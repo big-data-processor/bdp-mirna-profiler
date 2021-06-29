@@ -1,0 +1,38 @@
+- var:
+    mysqlContainerName: "{{ argv[0] }}" # argv[0] mysql container name
+    mysqlRootPasswd: "{{ argv[1] }}" # argv[1] mysql root password
+    mysqlPORT: "{{ argv[2] }}" # argv[4] mysql database port
+    mysqlUSER: "{{ argv[3] }}" # argv[2] mysql database user
+    mysqlPASSWD: "{{ argv[4] }}" # argv[3] mysql database user
+    mysqlVolumeName: "{{ argv[5] }}" # argv[5] The folder containing the mysql db files
+    restrictToLocalAccess: "{{ argv[6] }}" #Restrict to local access?|list|yes,no|yes||
+  task-template:
+    name: create-mysql-volume
+    exec: docker
+    args:
+      - volume
+      - create
+      - "{{ var.mysqlVolumeName }}"
+- task-template:
+    name: set-up-mysql
+    image:
+    exec: docker
+    args: 
+      - run
+      - --name
+      - "{{ var.mysqlContainerName }}"
+      - -e
+      - "MYSQL_ROOT_PASSWORD={{ var.mysqlRootPasswd }}"
+      - -e
+      - "MYSQL_USER={{ var.mysqlUSER }}"
+      - -e
+      - "MYSQL_PASSWORD={{ var.mysqlPASSWD }}"
+      #- -u
+      #- "{% set userInfo = os.userInfo() %}{{ userInfo.uid if userInfo.uid > 0 else '1001' }}:{{userInfo.gid if userInfo.gid > 0 else '1001'}}"
+      - -p
+      - "{{ '127.0.0.1:' if var.restrictToLocalAccess === 'yes'}}{{ var.mysqlPORT }}:3306"
+      - -d
+      - -v
+      - "{{ var.mysqlVolumeName }}:/var/lib/mysql"
+      - mysql:8.0
+      - --local-infile

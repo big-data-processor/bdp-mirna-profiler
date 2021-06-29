@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>BDP miRNA profiler</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="./theme/css/adminlte.min.css">
+  <link rel="stylesheet" href="./styles/mirna-result-display.css">
+  <script src="https://cdn.jsdelivr.net/gh/big-data-processor/bdp-page-api/bdp-page-api.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/filterizr/2.2.4/jquery.filterizr.min.js" integrity="sha512-7g5NUcH79A/d1+q+cj3KTJ31mCUPkD8f58sFEc98H5015295lT+ZBKWkaMeS6Snbu3m2VdfoW4VbSo9hOAJqYw==" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/xlsx@0.14.2/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block homeLink">
+        <a href="#" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block docLink">
+        <a href="#" class="nav-link">Documentation</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block planListLink">
+        <a href="#" class="nav-link">Plan List</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block prepareProjectInfoLink">
+        <a href="#" class="nav-link">Create Plan</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block executePipelineLink">
+        <a href="#" class="nav-link">Run Plan</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class='nav-item'>
+        <a class="nav-link link refreshLink" role="button">
+          <i class="fas fa-sync-alt"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link pageListLink" role="button">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link toggleFullPageLink" role="button">
+          <i class="fas fa-expand-alt"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link">
+      <img src="/assets/img/BDP_VER0_7_4C_Black.svg" class="brand-image" style="opacity: .8; width: 40px; margin-left: 5px;">
+      <span class="brand-text font-weight-light">BDP miRNA Profiler</span>
+    </a>
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-header">Introduction</li>
+          <li class='nav-item homeLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>Home</p>
+            </a>
+          </li>
+          <li class='nav-item docLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>Documentation</p>
+            </a>
+          </li>
+          <li class='nav-item planListLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-list"></i>
+              <p>Plans in this project</p>
+            </a>
+          </li>
+          <li class='nav-item'>
+            <a class="nav-link active">
+              <i class="nav-icon far fa-chart-bar"></i>
+              <p>Result</p>
+            </a>
+          </li>
+          <li class="nav-header">Run the workflow</li>
+          <li class='nav-item prepareProjectInfoLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tasks"></i>
+              <p>1. Create an analysis plan</p>
+            </a>
+          </li>
+          <li class='nav-item executePipelineLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-cogs fa-fw"></i>
+              <p>2. Execute a plan</p>
+            </a>
+          </li>
+          <li class="nav-header">Preparations</li>
+          <li class='nav-item prepareRefLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-download"></i>
+              <p>1. Download references</p>
+            </a>
+          </li>
+          <li class='nav-item dbPrepLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-database"></i>
+              <p>2. Prepare databases</p>
+            </a>
+          </li>
+          <li class='nav-item downloadExampleLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>3. Get example data</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <div class="content-wrapper" id='vue-app'>
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">{{ pageTitle }}</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Starter Page</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content" v-if="currentResult">
+      <div class='col-12 py-0'>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"> <v-icon class='mr-2'>far fa-folder-open</v-icon><u class='text-muted'>{{ currentResult.prefix }}</u><b>{{ currentResult.name }}</b><u class='text-muted'>{{ currentResult.suffix }}</u></h3>
+            <div class="card-tools">
+              <span v-if="currentResult.status === 0" class="badge badge-info">Queued</span>
+              <span v-if="currentResult.status === 1" class="badge badge-primary">Running</span>
+              <span v-if="currentResult.status === 2" class="badge badge-success">Success</span>
+              <span v-if="currentResult.status === 3" class="badge badge-danger">Error</span>
+              <span v-if="currentResult.status === 4" class="badge badge-warning">Deleting</span>
+            </div>            
+          </div>
+          <div class="card-body">
+            <dl class="row">
+              <dt class="col-md-4 col-lg-3 col-xl-2">The used analysis plan</dt>
+              <dd class="col-md-8 col-lg-9 col-xl-10">
+                <template v-if="currentResult.arguments[0].value && currentResult.arguments[0].value.id">
+                  <u class='text-muted'>{{ currentResult.arguments[0].value.prefix }}</u>{{ currentResult.arguments[0].value.name }}<u class='text-muted'>{{ currentResult.arguments[0].value.suffix }}</u>
+                  <a class='btn btn-outline-info' @click="openFileLink(currentResult.arguments[0].value.id)"> <i class='fas fa-external-link-alt'></i></a>
+                </template>
+                <template v-if="!currentResult.arguments[0].value || !currentResult.arguments[0].value.id">
+                  (file not found) The original file path on the server is {{ currentResult.arguments[0].value }}
+                </template>
+              </dd>
+              <dt class="col-md-4 col-lg-3 col-xl-2">The description for this plan</dt>
+              <dd class="col-md-8 col-lg-9 col-xl-10">{{ currentResult.arguments[0].value.desc || '(no description)' }}</dd>
+              <dt class="col-md-4 col-lg-3 col-xl-2">The raw sequence folder</dt>
+              <dd class="col-md-8 col-lg-9 col-xl-10">
+                <template v-if="currentResult.arguments[1].value && currentResult.arguments[1].value.id">
+                  <u>{{ currentResult.arguments[1].value.prefix }}</u>{{ currentResult.arguments[1].value.name }}{{ currentResult.arguments[1].value.suffix }}
+                  <a class='btn btn-outline-info' @click="openFileLink(currentResult.arguments[1].value.id)"> <i class='fas fa-external-link-alt'></i></a>
+                </template>
+              </dd>
+            </dl>
+          </div>
+          <div class="card-footer">
+            <button v-if="currentResult.status === 2" class='btn btn-success' @click="openStaticLinkByArgValue(currentResult.arguments[14].value, 'final_report.pdf')">
+              <i class='mr-2 fas fa-eye'></i>View the PDF report
+            </button>
+            <button v-if="currentResult.status === 2" class='btn btn-success' @click="downloadExcel()" :disabled="viewControls.isDownloadingExcel">
+              <i class='mr-2 fas fa-file-download'></i>
+              <span v-if="viewControls.isDownloadingExcel">Downloading</span>
+              <span v-else>Download the Excel report</span>
+            </button>
+            <button class='btn btn-primary' @click="openResultLink(currentResult.id)">
+              <i class='mr-2 fas fa-external-link-alt'></i>View the workflow process
+            </button>
+            <span class='text-muted float-right'>Created at: {{ currentResult.createdAt }}</span>
+          </div>
+        </div>
+      </div>
+      <div v-if="currentResult.status === 2" class='col-12'>
+        <h4>Results</h4>
+        <div class='row'>
+          <div class='col-12'>
+            <h5>Quality controls</h5>
+          </div>
+          <div class='col-12'>
+            <div class='card card-success card-outline collapsed-card' id='report_graphSummary'>
+              <div class='card-header'>
+                <span class='card-title'>Tag length distributions</span>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                  <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                </div>
+              </div>
+              <div class='card-body' style='overflow: auto; display: none;'>
+                <div class='container-fluid'>
+                  <div class='row'>
+                    <div class='col-md-4 col-lg-3 col-xl-2' v-for="tagLengthGraphObj in results.tagLengthGraphs" :key="tagLengthGraphObj.path">
+                      <div class='card card-outline card-success'>
+                        <div class='card-header'>
+                          <small class='card-title'>{{ tagLengthGraphObj.sampleName }}</small>
+                          <div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button></div>
+                        </div>
+                        <div class='card-body'>
+                          <img v-if="tagLengthGraphObj.url" class="img-fluid" :src="tagLengthGraphObj.url">
+                        </div>
+                        <div v-if="!tagLengthGraphObj.url" class="overlay">
+                          <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class='col-md-6'>
+            <div class="card card-success card-outline">
+              <div class="card-header">
+                <h3 class="card-title"><b>The FastQC reports of all samples</b></h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                </div>
+              </div>
+              <div class="card-body" style='max-height: 300px; overflow: auto;'>
+                <div class='row'>
+                <table class="table table-hover responsive  text-nowrap table-sm">
+                  <thead><tr><th>Sample path</th></tr></thead>
+                  <tbody><tr v-for="pathObj in results.fastqcPaths">
+                    <td><button class='btn btn-sm btn-success mr-2' @click="openStaticLink(pathObj.id, pathObj.path)"><i class='fas fa-search-plus'></i></button>{{ pathObj.path }}</td>
+                  </tr></tbody>
+                </table>
+                </div>
+              </div>
+              <div class="card-footer">
+                <button class='btn btn-sm btn-success' @click="openStaticLinkByArgValue(results.fastqcFolderPath, '/')"><i class='fas fa-eye mr-2'></i>View folder contents</button>
+              </div>
+            </div>
+          </div>
+          <div class='col-md-6'>
+            <div class="card card-success card-outline">
+              <div class="card-header">
+                <h3 class="card-title"><b>The MultiQC report</b></h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                  <button type="button" class="btn btn-tool" data-card-widget="maximize" @click="viewControls.multiQCmaximized = !viewControls.multiQCmaximized"><i class="fas fa-expand"></i></button>
+                </div>
+              </div>
+              <div class="card-body" style='overflow: auto;' :style="{maxHeight: viewControls.multiQCmaximized ? 'unset' : '300px'}">
+                <b>The mean quality value across each base position in reads.</b><br>
+                <div class='text-center'>
+                  <img :src="results.multiQC.meanQalityURL" class='img-fluid' /><br>
+                </div>
+                <hr>
+                <b>The mean quality value across each base position in reads.</b><br>
+                <div class='text-center'>
+                  <img :src="results.multiQC.fragmentSizeURL" class='img-fluid' /><br>
+                </div>  
+                <hr>
+                <b> The average GC content of reads. Normal random library typically have a roughly normal distribution of GC content.</b><br>
+                <div class='text-center'>
+                  <img :src="results.multiQC.avgGCcontentURL" class='img-fluid' /><br>
+                </div>  
+              </div>
+              <div class="card-footer">
+                <button class='btn btn-sm btn-success' @click="openStaticLinkByArgValue(currentResult.arguments[13].value, '/multiqc_report.html')"><i class='fas fa-search-plus fa-fw mr-2'></i>View the complete MultiQC reports</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-12'>
+            <h5>Sample distances</h5>
+          </div>
+          <div class='col-md-6'>
+            <div class='card card-success card-outline' id='report_heatmap_sample_dist'>
+              <div class='card-header'>
+                <h3 class='card-title'><b>The principal component analysis</b></h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                </div>
+              </div>
+              <div class='card-body'>
+                <div class='text-center'>
+                  <img class='img-fluid' :src="results.sampleDist.pcaPlotURL" />
+                </div>
+              </div>
+              <div class='card-footer'>
+              </div>
+            </div>
+          </div>
+          <div class='col-md-6'>
+            <div class='card card-success card-outline' id='report_pca_sample_dist'>
+              <div class='card-header'>
+                <h3 class='card-title'><b>Hierarchical clustering results</b></h3>
+                <div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button></div>
+              </div>
+              <div class='card-body'>
+                <div class='text-center'>
+                  <img class='img-fluid' :src="results.sampleDist.heatmapGraphURL" />
+                </div>
+              </div>
+              <div class='card-footer'>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-12'>
+            <h5>Annotation summary report</h5>
+          </div>
+          <div class='col-12'>
+            <div class='card card-success' id='report_annotationSummary'>
+              <div class='card-header'>
+                <h3 class='card-title'><b>The annotation summary</b></h3>
+                <div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button></div>
+              </div>
+              <div class='card-body'>
+                <div id='report_annotationSummaryContainer' style='height: 250px;'>
+                  <hot-table ref="report_annotationSummaryTable" :settings="hotSettings"></hot-table>
+                </div>
+              </div>
+              <div class='card-footer'>
+              </div>
+            </div>
+          </div>
+          <div class='col-12'>
+            <div class='card card-success collapsed-card'>
+              <div class='card-header'>
+                <h3 class='card-title'><b>Top differential expressions</b></h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                </div>
+              </div>
+              <div class='card-body' style='display: none;'>
+                <div class='text-center'>
+                  <img class='img-fluid' :src="results.topDiffclusterURL"></img>
+                </div>
+              </div>
+              <div class='card-footer'>
+                Hierarchical clustering results of the top 80 differentially expressed miRNAs across all samples.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-12' v-for="(contrast, index) in results.comparisons">
+            <div class='card card-primary'>
+              <div class='card-header'>
+                <h3 class='card-title'><b>Comparisons: {{ contrast.group1 }} vs. {{ contrast.group2 }}</b></h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+              </div>
+              <div class='card-body'>
+                <div class='row'>
+                  <div class='col-md-6'>
+                    <div class='card card-primary card-outline'>
+                      <div class='card-header'>
+                        <h3 class='card-title'>The volcano plot</h3>
+                        <div class='card-tools'>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                      </div>
+                      <div class='card-body'>
+                        <div class='text-center'>
+                          <img :src="contrast.volcanoPlotUrl" class='img-fluid'/>
+                        </div>
+                      </div>
+                      <div class='card-footer'>
+                        <button class='btn btn-sm btn-primary mr-2' @click="openStaticLink(contrast.folderObj.id, '/' +  contrast.group1 + '_vs_' + contrast.group2 + '_volcano_plot.pdf')"><i class='fas fa-external-link-alt mr-2'></i>View the pdf file</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class='col-md-6'>
+                    <div class='card card-primary card-outline'>
+                      <div class='card-header'>
+                        <h3 class='card-title'>The bar plot</h3>
+                        <div class='card-tools'>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                      </div>
+                      <div class='card-body'>
+                        <div class='text-center'>
+                          <img :src="contrast.barPlotUrl" class='img-fluid'/>
+                        </div>
+                      </div>
+                      <div class='card-footer'>
+                        <button class='btn btn-sm btn-primary mr-2' @click="openStaticLink(contrast.folderObj.id, '/' +  contrast.group1 + '_vs_' + contrast.group2 + '_barplot.pdf')"><i class='fas fa-external-link-alt mr-2'></i>View the pdf file</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class='col-md-6'>
+                    <div class='card card-primary card-outline collapsed-card'>
+                      <div class='card-header'>
+                        <h3 class='card-title'>Positively expressed miRNAs</h3>
+                        <div class='card-tools'>
+                          <button v-if="contrast.positiveDeList?.status === 'expanded'" type="button" class="btn btn-tool text-primary" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse" @click="loadingTableData('positiveDeList', index, '_deList_positive.csv')"><i class="fas fa-plus"></i></button>
+                        </div>
+                      </div>
+                      <div class='card-body' style='height: 350px; display: none;'>
+                        <hot-table ref="positiveDeList" :settings="hotSettings"></hot-table>
+                      </div>
+                      <div class='card-footer'>
+                        
+                      </div>
+                    </div>
+                  </div>
+                  <div class='col-md-6'>
+                    <div class='card card-primary card-outline collapsed-card'>
+                      <div class='card-header'>
+                        <h3 class='card-title'>Negatively expressed miRNAs</h3>
+                        <div class='card-tools'>
+                          <button v-if="contrast.negativeDeList?.status === 'expanded'" type="button" class="btn btn-tool text-primary" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse" @click="loadingTableData('negativeDeList', index, '_deList_negative.csv')"><i class="fas fa-plus"></i></button>
+                        </div>
+                      </div>
+                      <div class='card-body' style='height: 350px; display: none;'>
+                        <hot-table ref="negativeDeList" :settings="hotSettings"></hot-table>
+                      </div>
+                      <div class='card-footer'>
+                        
+                      </div>
+                    </div>
+                  </div>
+                  <div class='col-md-6'>
+                    <div class='card card-primary card-outline collapsed-card'>
+                      <div class='card-header'>
+                        <h3 class='card-title'>Predicted targets of positively expressed miRNAs</h3>
+                        <div class='card-tools'>
+                          <button v-if="contrast.positiveTargetList?.status === 'expanded'" type="button" class="btn btn-tool text-primary" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse" @click="loadingTableData('positiveTargetList', index, '_predictedTargets_pos.csv')"><i class="fas fa-plus"></i></button>
+                        </div>
+                      </div>
+                      <div class='card-body' style='height: 350px; display: none;'>
+                        <hot-table ref="positiveTargetList" :settings="hotSettings"></hot-table>
+                      </div>
+                      <div class='card-footer'></div>
+                    </div>
+                  </div>
+                  <div class='col-md-6'>
+                    <div class='card card-primary card-outline collapsed-card'>
+                      <div class='card-header'>
+                        <h3 class='card-title'>Predicted targets of negatively expressed miRNAs</h3>
+                        <div class='card-tools'>
+                          <button v-if="contrast.negativeTargetList?.status === 'expanded'" type="button" class="btn btn-tool text-primary" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse" @click="loadingTableData('negativeTargetList', index, '_predictedTargets_neg.csv')"><i class="fas fa-plus"></i></button>
+                        </div>
+                      </div>
+                      <div class='card-body' style='height: 350px; display: none;'>
+                        <hot-table ref="negativeTargetList" :settings="hotSettings"></hot-table>
+                      </div>
+                      <div class='card-footer'></div>
+                    </div>
+                  </div>
+                  <div class='col-12'>
+                    <h5>Enrichment analysis</h5>
+                  </div>
+                  <div class='col-md-6'>
+                    <div class='card card-primary card-outline collapsed-card'>
+                      <div class='card-header'>
+                        <h3 class='card-title'>GO enrichments for predicted targets of the positively expressed miRNAs.</h3>
+                        <div class='card-tools'>
+                          <button v-if="contrast.positiveGoList?.status === 'expanded'" type="button" class="btn btn-tool text-primary" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse" @click="loadingTableData('positiveGoList', index, '_go_predictedTargets_pos.txt')"><i class="fas fa-plus"></i></button>
+                        </div>
+                      </div>
+                      <div class='card-body' style='height: 350px; display: none;'>
+                        <hot-table ref="positiveGoList" :settings="hotSettings"></hot-table>
+                      </div>
+                      <div class='card-footer'></div>
+                    </div>
+                  </div>
+                  <div class='col-md-6'>
+                    <div class='card card-primary card-outline collapsed-card'>
+                      <div class='card-header'>
+                        <h3 class='card-title'>GO enrichments for predicted targets of the negatively expressed miRNAs.</h3>
+                        <div class='card-tools'>
+                          <button v-if="contrast.negativeGoList?.status === 'expanded'" type="button" class="btn btn-tool text-primary" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse" @click="loadingTableData('negativeGoList', index, '_go_predictedTargets_neg.txt')"><i class="fas fa-plus"></i></button>
+                        </div>
+                      </div>
+                      <div class='card-body' style='height: 350px; display: none;'>
+                        <hot-table ref="negativeGoList" :settings="hotSettings"></hot-table>
+                      </div>
+                      <div class='card-footer'></div>
+                    </div>
+                  </div>
+                  <div class='col-md-6'>
+                    <div class='card card-primary card-outline collapsed-card'>
+                      <div class='card-header'>
+                        <h3 class='card-title'>KEGG pathway enrichments for predicted targets of the positively expressed miRNAs.</h3>
+                        <div class='card-tools'>
+                          <button v-if="contrast.positiveKEGGList && contrast.positiveKEGGList.status === 'expanded'" type="button" class="btn btn-tool text-primary" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse" @click="loadingTableData('positiveKEGGList', index, '_kegg_predictedTargets_pos.txt')"><i class="fas fa-plus"></i></button>
+                        </div>
+                      </div>
+                      <div class='card-body' style='height: 350px; display: none;'>
+                        <hot-table ref="positiveKEGGList" :settings="hotSettings"></hot-table>
+                      </div>
+                      <div class='card-footer'></div>
+                    </div>
+                  </div>
+                  <div class='col-md-6'>
+                    <div class='card card-primary card-outline collapsed-card'>
+                      <div class='card-header'>
+                        <h3 class='card-title'>KEGG pathway enrichments for predicted targets of the negatively expressed miRNAs.</h3>
+                        <div class='card-tools'>
+                          <button v-if="contrast.negativeKEGGList && contrast.negativeKEGGList.status === 'expanded'" type="button" class="btn btn-tool text-primary" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse" @click="loadingTableData('negativeKEGGList', index, '_kegg_predictedTargets_neg.txt')"><i class="fas fa-plus"></i></button>
+                        </div>
+                      </div>
+                      <div class='card-body' style='height: 350px; display: none;'>
+                        <hot-table ref="negativeKEGGList" :settings="hotSettings"></hot-table>
+                      </div>
+                      <div class='card-footer'></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class='card-footer'>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class='col-12'>
+        <h4>Workflow execution timeline <i class='link fas fa-sync-alt' @click="refreshWorkflow"></i></h4>
+        <div class='timeline'>
+          <div class='time-label'>
+            <span class="bg-info"><i class='fas fa-arrow-down fa-fw mr-2'></i>Workflow started at {{ moment(new Date(currentResult.timer[0])).format('LTS Do MM, YYYY') }}</span>
+          </div>
+          <template v-for="(childResults, stepIndex) in currentResult.children">
+            <div class='time-label'>
+              <h4 class="bg-light color-palette"><b>Step {{ stepIndex + 1}}. {{currentResult.task.stepNames[stepIndex] || childResults.map(r => r.task.name).join(', ') }}</b></h4>
+            </div>
+            <div v-for="(childResult, index) in childResults">
+              <!-- Before each timeline item corresponds to one icon on the left scale -->
+                <i v-if="childResult.status === 0" class="far fa-hourglass bg-info fa-fw"></i>
+                <i v-if="childResult.status === 1" class="fas fa-circle-notch fa-spin bg-primary fa-fw"></i>
+                <i v-if="childResult.status === 2" class="fas fa-check bg-success fa-fw"></i>
+                <i v-if="childResult.status === 3" class="fas fa-times bg-danger fa-fw"></i>
+                <i v-if="childResult.status === 4" class="fas fa-trash-alt bg-warning fa-fw"></i>
+                <!-- Timeline item -->
+                <div class="timeline-item">
+                <!-- Time -->
+                  <span class="time"><i class="fas fa-clock"></i>  {{ moment(new Date(childResult.createdAt)).format('LTS Do MM, YYYY') }}</span>
+                  <!-- Header. Optional -->
+                  <h3 class="timeline-header"><b>Task: {{ childResult.task.name }}</b></h3>
+                  <!-- Body -->
+                  <div class="timeline-body">
+                    {{ childResult.task.desc || '(no description)' }}
+                    <!-- Step 2. trim adapters (fastQC) -->
+                    <template v-if="childResult.task.key === 'trim-adapter'">
+                      <hr><div class="card card-success">
+                        <div class="card-header">
+                          <h3 class="card-title"><b>The FastQC reports of all samples</b></h3>
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" @click="updateFastQCresult(childResult)"><i class="fas fa-sync-alt"></i></button>
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          <div class='row'>
+                          <table class="table table-hover responsive  text-nowrap table-sm">
+                            <thead><tr><th>Sample path</th></tr></thead>
+                            <tbody><tr v-for="pathObj in results.fastqcPaths">
+                              <td><button class='btn btn-sm btn-success mr-2' @click="openStaticLink(pathObj.id, pathObj.path)"><i class='fas fa-search-plus'></i></button>{{ pathObj.path }}</td>
+                            </tr></tbody>
+                          </table>
+                          </div>
+                        </div>
+                        <div class="card-footer">
+                          <button class='btn btn-sm btn-success' @click="openStaticLinkByArgValue(childResult.arguments[2].value, '/')"><i class='fas fa-eye mr-2'></i>View folder contents</button>
+                        </div>
+                      </div>
+                    </template>
+                    <!-- Step 9. annotation summary report -->
+                    <template v-if="childResult.task.key === 'annotation-summary' && childResult.status === 2">
+                      <hr><div class='card card-success' id='annotationSummary'>
+                        <div class='card-header'>
+                          <h3 class='card-title'><b>The annotation summary</b></h3>
+                          <div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button></div>
+                        </div>
+                        <div class='card-body'>
+                          <div id='annotationSummaryContainer' style='height: 250px;'>
+                            <hot-table ref="annotationSummaryTable" :settings="hotSettings"></hot-table>
+                          </div>
+                        </div>
+                        <div class='card-footer'>
+                        </div>
+                      </div>
+                    </template>
+                    <!-- Step 12. mature-matrix-tcga -->
+                    <template v-if="childResult.task.key === 'mature-matrix-tcga' && false">
+                      <hr>
+                      <div class="card card-success">
+                        <div class="card-header d-flex p-0">
+                          <h3 class="card-title p-3"><b>Mature miRNA expressions</b></h3>
+                          <ul class="nav nav-pills ml-auto p-2">
+                            <li class="nav-item"><a class="nav-link active" href="#tab_raw_counts" data-toggle="tab">Raw counts</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_normalized_counts" data-toggle="tab">Normalized</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_log2_normalized" data-toggle="tab">Log2-normalized </a></li>
+                          </ul>
+                          <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                          <div class="tab-content">
+                            <div class="tab-pane active rowCounts" id="tab_raw_counts" style='height: 400px;'>
+                              <hot-table ref="rawCountTable" :settings="hotSettings"></hot-table>
+                            </div>
+                            <div class="tab-pane normalizedCounts" id="tab_normalized_counts" style='height: 400px;'>>
+                              <hot-table ref="normalizedCountTable" :settings="hotSettings"></hot-table>
+                            </div>
+                            <div class="tab-pane log2Normalized" id="tab_log2_normalized">
+                              
+                            </div>
+                          </div>
+                        </div>
+                      </div>  
+                    </template>
+                    <template v-if="childResult.task.key === 'graph-summary'">
+                      <hr>
+                      <div class='row'>
+                        <div class='col-12'>
+                        <div class='card card-success' id='graphSummary'>
+                          <div class='card-header'>
+                            <span class='card-title'>Tag length distributions</span>
+                            <div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button></div>
+                          </div>
+                          <div class='card-body'>
+                            <div class='row'>
+                            <div class='col-md-4' v-for="tagLengthGraphObj in results.tagLengthGraphs" :key="tagLengthGraphObj.path">
+                              <div class='card card-outline card-success'>
+                                <div class='card-header'>
+                                  <small class='card-title'>{{ tagLengthGraphObj.sampleName }}</small>
+                                  <div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button></div>
+                                </div>
+                                <div class='card-body'>
+                                  <img v-if="tagLengthGraphObj.url" class="img-fluid" :src="tagLengthGraphObj.url">
+                                </div>
+                                <div v-if="!tagLengthGraphObj.url" class="overlay">
+                                  <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                  <!-- Placement of additional controls. Optional -->
+                  <div class="timeline-footer">
+                    <a class="btn btn-outline-primary btn-sm text-primary" @click="openResultLink(childResult.id)"><i class='fas fa-external-link-alt fa-fw mr-2'></i>View the process</a>
+                    <a v-if="childResult.task.key === 'multi-qc' && childResult.status === 2" @click="openStaticLinkByArgValue(currentResult.arguments[13].value, '/multiqc_report.html')" class='btn btn-success btn-sm'><i class='fas fa-search-plus fa-fw mr-2'></i> MultiQC results</a>
+                    <a v-if="childResult.task.key === 'create-project-dir'" @click="openStaticLinkByArgValue(childResult.arguments[3].value, '/')" class='btn btn-success btn-sm'><i class='fas fa-search-plus fa-fw mr-2'></i> View the project directory</a>
+                  </div>
+                </div>
+          </template>
+          <div class='time-label' v-if="currentResult.status >= 2">
+            <span class="bg-green">Workflow finished at {{ moment(new Date(currentResult.timer[1])).format('LTS Do MM, YYYY') }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      <strong>Copyright &copy; Chi Yang & Kuan-Fu Chen</strong> All rights reserved.
+    </div>
+    <!-- Default to the left -->
+    The miRNA Profiler
+  </footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@handsontable/vue/dist/vue-handsontable.min.js"></script>
+<script src="./theme/js/adminlte.js" ></script>
+<script src="./scripts/main.js" ></script>
+<script src="./scripts/mirna-result-display.js" ></script>
+</body>
+</html>

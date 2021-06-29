@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>BDP miRNA Profiler</title>
+  <script src="https://cdn.jsdelivr.net/gh/big-data-processor/bdp-page-api/bdp-page-api.js"></script>
+  <!-- API -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+  
+  <!-- Vue -->
+  <script src="https://unpkg.com/vue-material"></script>
+  <!-- Vue material -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" 
+  integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" 
+  integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.1/dist/FileSaver.min.js"></script>
+  <!-- saveAS -->
+  <script src="https://unpkg.com/xlsx@0.14.2/dist/xlsx.full.min.js"></script>
+  <!-- sheetJS -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous"/> -->
+  <!--  -->
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" /> -->
+  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script> -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  
+  <!-- bootstrap -->  
+  <!-- <link rel="stylesheet" href="./styles/main.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/theme/default.css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <link rel="stylesheet" href="./styles/main.css">
+  <link rel="stylesheet" href="./theme/css/adminlte.min.css">
+  <link rel="stylesheet" href="./styles/prepare_project_info.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block homeLink">
+        <a href="#" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block docLink">
+        <a href="#" class="nav-link">Documentation</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block planListLink">
+        <a href="#" class="nav-link">Plan List</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block prepareProjectInfoLink">
+        <a href="#" class="nav-link text-info font-weight-bold">Create Plan</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block executePipelineLink">
+        <a href="#" class="nav-link">Run Plan</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class='nav-item'>
+        <a class="nav-link link refreshLink" role="button">
+          <i class="fas fa-sync-alt"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link pageListLink" role="button">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link toggleFullPageLink" role="button">
+          <i class="fas fa-expand-alt"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link">
+      <img src="/assets/img/BDP_VER0_7_4C_Black.svg" class="brand-image"
+        style="opacity: .8; width: 40px; margin-left: 5px;">
+      <span class="brand-text font-weight-light">BDP miRNA Profiler</span>
+    </a>
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-header">Current Project</li>
+          <li class='nav-item' id='currentProjectLink'></li>
+          <li class="nav-header">Introduction</li>
+          <li class='nav-item homeLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>Home</p>
+            </a>
+          </li>
+          <li class='nav-item docLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>Documentation</p>
+            </a>
+          </li>
+          <li class='nav-item planListLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-list"></i>
+              <p>Plans in this project</p>
+            </a>
+          </li>
+          <li class="nav-header">Run the workflow</li>
+          <li class='nav-item prepareProjectInfoLink'>
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tasks"></i>
+              <p>1. Create an analysis plan</p>
+            </a>
+          </li>
+          <li class='nav-item executePipelineLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-cogs fa-fw"></i>
+              <p>2. Execute a plan</p>
+            </a>
+          </li>
+          <li class="nav-header">Preparations</li>
+          <li class='nav-item prepareRefLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-download"></i>
+              <p>1. Download references</p>
+            </a>
+          </li>
+          <li class='nav-item dbPrepLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-database"></i>
+              <p>2. Prepare databases</p>
+            </a>
+          </li>
+          <li class='nav-item downloadExampleLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>3. Get example data</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+  <div class="content-wrapper">
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark" id='pageTitle'></h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item homeLink"><a href="#">Home</a></li>
+              <li class="breadcrumb-item">Run the workflow</li>
+              <li class="breadcrumb-item active">Create an analysis plan</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- content -->
+    <div class="content">
+      <div class="container">
+        <div class='row'><div class='col-12'>
+        <div id="step">
+          <div v-if="currentProjectInfoRecord" class='p-2'>
+            <h5>
+              You are viewing a previously created plan: <a class='link' @click="openFileLink(currentProjectInfoRecord.id)">
+                <i class='fas fa-file-alt fa-fw'></i><u>{{ currentProjectInfoRecord.prefix }}<b>{{ currentProjectInfoRecord.name }}</b>{{ currentProjectInfoRecord.suffix }}</u>
+                <i class='fas fa-external-link-alt fa-fw'></i>
+              </a>
+              Click <a class='link' @click="navigateToFilePage(currentProjectInfoRecord.id, 'exeucte-pipeline')">HERE</a> to execute this plan.<br>
+            </h5>
+            <div class="alert alert-primary" role="alert">
+              <b>[NOTE]</b> A created plan is immutable.<br>To update settings, you will need to create another analysis plan from this one.<br> You can view the original plan, update settings and save as another plan in the following.
+            </div>
+          </div>
+          <div v-if="!currentProjectInfoRecord" class='p-2'>
+            <h5>You are creating a new analysis plan.</h5>
+          </div>
+          <template>
+            <div>
+              <md-steppers :md-active-step.sync="active" md-linear md-vertical>
+                <md-step id="caseInfo" md-label="1. The basic information for this analysis"  :md-done.sync="caseInfo">
+                  <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                      <label for="title">Title</label>
+                      <input type="text" class="form-control" id="title" v-model="title" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="institute">Institute</label>
+                      <input type="text" class="form-control" id="institute"  v-model="institute" required>
+                    </div>
+                    <div class="col-md-10 mb-3">
+                      <label for="customer">Customer</label>
+                      <input type="text" class="form-control" id="customer" v-model="customer" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="Bioinformatician">Bioinformatician</label>
+                      <input type="text" class="form-control" id="Bioinformatician" v-model="userName" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="PhoneExt">PhoneExt</label>
+                      <input type="text" class="form-control" id="PhoneExt" v-model="phone" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <md-datepicker v-model="selectedDate">
+                        <label>Select date</label>
+                      </md-datepicker>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                      <label for="Positive">The cutoff for positive log2 fold-changes</label>
+                      <input type="text" class="form-control" v-bind:class="{ 'is-invalid': warnPos}" id="Positive" v-model="positiveFCutoff" required />
+                      <div class='invalid-feedback' v-if="warnPos">*Value should be greater than or equal to 0.</div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label for="Negative">The cutoff for negative log2 fold-changes</label>
+                      <input type="text" class="form-control" v-bind:class="{ 'is-invalid': warnNeg}" id="Negative" v-model="negativeFCutoff" required>
+                      <div class='invalid-feedback' v-if="warnNeg">*Value should be less than or equal to 0.</div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label for="pValue">p-value cutoffs</label>
+                      <input type="text" class="form-control" id="pValue" v-bind:class="{ 'is-invalid': warnPvalue}" v-model="pValue" required>
+                      <div class='invalid-feedback' v-if="warnPvalue">*The p-value should be >= 0 and <=  1.</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="ReferenceGenome">Reference genome</label>
+                      <input type="text" class="form-control" id="referenceGenome" v-model="referenceGenome" placeholder="description">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="Annotations">Annotations</label>
+                      <input type="text" class="form-control" id="annotations" v-model="annotations" placeholder="description">
+                    </div>
+                    <!-- <div class="form-group col-12">
+                      <label for="Description">Description</label>
+                      <textarea class="form-control" id="Description" rows="5"></textarea>
+                    </div> -->
+                  </div>
+                  <hr>
+                  <div class="errorData" v-if="errorData">Data error</div>
+                  <md-button class="md-raised md-primary" @click="setDone('caseInfo', 'typeOfSample')" :disabled="warnPos || warnNeg || warnPvalue"
+                    style="background-color: #00b7c9;">Continue</md-button>
+                  <!-- <div class="text-center col-12" v-if="errorData">
+                    <h5 style="color:red">Data error</h5>
+                  </div> -->
+                </md-step>
+                <!-- first -->
+                <!-- :md-error="secondStepError" -->
+                <md-step id="typeOfSample" md-label="2. Prepare a folder containing the raw sequencing files" :md-done.sync="typeOfSample">
+                  <h5 class="my-3">Choose the way to prepare the raw sequence folder:</h5>
+                  <div class="row">
+                    <div class="col-md-4">
+                        <div class="card bg-light selectType btnDataType" :class="{'btn-folder': importMode === 'select'}">
+                          <button class="btn" @click="selectFolder" type="button">
+                            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                            <i class="fas fa-folder-open mt-3" style="font-size: 72px; color:#efcc04;"></i>
+                            <div class="card-body text-center">
+                              <p class="text-secondary">Select an uploaded record</p>
+                            </div>
+                          </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="card bg-light selectType btnDataType" :class="{'btn-folder': importMode === 'upload'}">
+                        <button class="btn" @click="importMode = 'upload'; fileListToBeUploaded = null;" type="button">
+                          <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                          <i class="fas fa-upload mt-3" style="font-size: 72px; color: lightblue;"></i>
+                          <div class="card-body text-center">
+                            <p class="text-secondary">Select to upload files</p>
+                          </div>
+                        </button> 
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="card  bg-light selectType btnDataType" :class="{'btn-severImport': importMode === 'import'}">
+                        <button class="btn" @click="importMode = 'import'; fileListToBeUploaded = null; setTypedisabled = false" :disabled="bdpLevel < 3">
+                          <i class="fas fa-server mt-3" style="font-size: 72px; color:#848a8c;"></i>
+                          <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                          <div class="card-body text-center">
+                            <p class="text-secondary">Select to import from a server folder</p>
+                          </div>  
+                      </button>
+                    </div>
+                    </div>
+                  </div>
+                  <!-- /lustre_work/stripe_folder/ian/bioinfo_services/Dr.HsiehChingHua/20200713/20200720-SCH_MTC/SCH_MTC-182569389 -->
+                  
+                  <div class="col-12" v-if="importMode === 'import'">
+                      <hr>
+                      <h4>Import the folder that already on the server.</h4>
+                      <p>A new folder record will be created to associate that folder on the server. (Note: only power users have privileges to perform this action.) </p>
+                      <p>If the folder record is already created, you may choose the <b>Select an uploaded record</b> to find the folder record.</p>
+                      <div class="row">
+                        <div class="col-12 mt-3">
+                          <label for="fileName">Folder Name</label>
+                          <input type="text" class="form-control" v-model="sampleBasicInformation.name">
+                        </div>
+                        <div class="col-6">
+                          <label for="prefix">Folder name prefix</label>
+                          <input type="text" class="form-control" v-model="sampleBasicInformation.prefix">
+                        </div>
+                        <div class="col-6">
+                          <label for="suffix">Folder name suffix</label>
+                          <input type="text" class="form-control" v-model="sampleBasicInformation.suffix">
+                        </div>
+                        <div class="col-12">
+                          <label for="tags">Tags</label>
+                          <template>
+                            <div>
+                              <md-chips v-model="sampleBasicInformation.tags" :md-limit="10">
+                                <template slot="md-chip" slot-scope="{ chip }">
+                                  {{ chip }}
+                                </template>
+                                <!-- <div class="md-helper-text">Up to 10 condition</div> -->
+                              </md-chips>
+                            </div>
+                          </template>
+                          <!-- <input type="text" class="form-control" id="tags" v-model="sampleBasicInformation.tags" > -->
+                        </div>
+                        <div class="col-12 mb-3">
+                          <label for="description">Description</label>
+                          <textarea class="form-control" v-model="sampleBasicInformation.desc"></textarea>
+                        </div>
+                        <div class="col-12">
+                          <label for="severPath">Sever path</label>
+                          <input type="text" class="form-control" v-model="severPath">
+                        </div>
+                        <div class="errorData" v-if="errorSampleType">Please specify the server path.</div>
+                      <!-- <div class="input-group-append"> -->
+                        <!-- <button class="btn btn-outline-secondary" @click="severWebpath">Enter</button> -->
+                      <!-- </div> -->
+                    </div>
+                    <!--  -->
+                  </div>
+                  <!--  -->
+                  <div class="col-12" v-if="importMode === 'select'">
+                    <hr>
+                    <h4>Please select an uploaded folder record that contains raw sequencing files.</h4>
+                      <div class="row">
+                        <template v-for="(item,index) in validDataFiles" >
+                          <div class='col-lg-4 col-md-6' :class="{'d-none': current === false ? false : current !== index}">
+                            <div class="card card-info" :class="{'card-outline': index !== current}">
+                              <div class="card-header">
+                                <h3 class="card-title">
+                                  <u>{{item.prefix}}</u>{{ item.name }}<u>{{ item.suffix }}</u>
+                                </h3>
+                                <div class="card-tools">
+                                  <i class="far fa-file-alt"></i>
+                                </div>
+                                <!-- /.card-tools -->
+                              </div>
+                              <div class="card-body">
+                                <p class="mt-2">Tags : <span class="badge badge-primary ml-1" v-for="itemtag in item.tags">{{itemtag}}</span></p>
+                                <p>Format : {{item.format}}</p>
+                                <p>Description : {{item.desc || '(no description)'}}</p>
+                                <br>
+                                <p class="text-right card-text pr-0 mr-0" style="font-size: 12px;">{{item.updatedAt}}</p>
+                              </div>
+                              <div class="card-footer">
+                                <button class="btn btn-primary" @click="toggleFileSelection(item, index)"  type="button">
+                                  <span v-if='index === current'>Unselect</span>
+                                  <span v-if='index !== current'>Select</span>
+                                </button>
+                                <button class='btn btn-info float-right' @click="openFileLink(item.id)">
+                                  <i class='fas fa-external-link-alt fa-fw'></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </template>
+                        <div class="errorData" v-if="errorSampleType">Please select a folder record to proceed.</div>
+                        <!-- </transition-group> -->
+                      </div>
+                  </div>
+
+                  <div class="col-12" v-if="importMode === 'upload'">
+                    <hr>
+                    <h4>Upload raw small RNA sequencing files.</h4>
+                    <p>A new folder record will be created and these files will be uploaded to it.</p>
+                    <p>If the folder record is already created, you may choose the <b>Select an uploaded record</b> to find the folder record.</p>
+                    <div class="row">
+                      <div class="col-6 mb-3">
+                        <label for="prefix">Folder name prefix</label>
+                        <input type="text" class="form-control folderPrefix" v-model="sampleBasicInformation.prefix">
+                      </div>
+                      <div class="col-6 mb-3">
+                        <label for="suffix">Folder name suffix</label>
+                        <input type="text" class="form-control folderSuffix" v-model="sampleBasicInformation.suffix">
+                      </div>
+                      <div class="col-12 mb-3">
+                        <label for="fileName">FolderName</label>
+                        <input type="text" class="form-control folderName" v-model="sampleBasicInformation.name">
+                      </div>
+                      <div class="col-12">
+                        <label for="tags">Tags</label>
+                        <template>
+                          <div>
+                            <md-chips v-model="sampleBasicInformation.tags" :md-limit="10">
+                              <template slot="md-chip" slot-scope="{ chip }">
+                                {{ chip }}
+                              </template>
+                            </md-chips>
+                          </div>
+                        </template>
+                      </div>
+                      <div class="col-12 mb-3">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" v-model="sampleBasicInformation.desc"></textarea>
+                      </div>
+                      <div class='col-12 mb-3'>
+                        <md-field>
+                          <label>Upload files</label>
+                          <md-file placeholder="Select multiple .fastq.gz files" multiple accept=".fastq.gz" @md-change="updateFileListToBeUploaded" />
+                        </md-field>
+                        <span>{{ fileListToBeUploaded ? fileListToBeUploaded.length : 0 }} files selected.</span><br>
+                        <span v-if="uploadProgress >= 0 && uploadProgress < 100">Uploading ... <i class='fas fa-circole-notch fa-fw fa-spin'></i></span>
+                        <span v-if="uploadProgress === 100">Uploaded<i class='fas fa-check text-success fa-fw'></i></span>
+                        <br>
+                        <md-progress-bar v-if="uploadProgress >= 0" md-mode="determinate" :md-value="uploadProgress"></md-progress-bar>
+                      </div>
+                      <div class="errorData" v-if="errorSampleType">Please select fastq.gz files to upload</div>
+                    </div>
+                  </div>
+                  <hr>
+                  <md-button class="md-raised md-accent" @click="setReturn('caseInfo','typeOfSample')">Previous</md-button>
+                  <md-button class="md-raised md-primary" @click="setTypeSample('typeOfSample', 'samples')" 
+                  style="background-color: #00b7c9;" :disabled="setTypedisabled">Continue</md-button>
+                </md-step>
+                <!-- secondary -->
+                <md-step id="samples"  md-label="3. Specify sample information for sequencing files" :md-done.sync="samples">
+                  <div v-if="selectedSeqFolderObj">
+                    <h4>You selected the folder containing raw sequence files to anlaysis</h4><br> 
+                      <i class='fas fa-folder-open mx-2'></i>
+                      <span class="text-muted">{{selectedSeqFolderObj.prefix}}</span>
+                      <span>{{selectedSeqFolderObj.name}}</span>
+                      <span class="text-muted">{{selectedSeqFolderObj.suffix}}</span>
+                      <a class='link' @click="openFileLink(selectedSeqFolderObj.id)"><i class='fas fa-external-link-alt mx-2'></i></a>
+                    <!-- {{projectInfoName}} -->
+                  </div>
+                  <hr>
+                  <h4>Please fill the sample information for the following sequencing files.</h4>
+                  <div class="alert alert-primary" role="alert">
+                    <b>[NOTE]</b>
+                    <ul>
+                      <li>Please use legal characters like a-z, A-Z, 0-9, and underline (_) for the library id, sample name, and condition.<br> Avoid other special characters and white space.</li>
+                      <li>Files with the same sample name will be combined. (e.g. sequencing files from different lanes of a sample need be merged.)</li>
+                    </ul>
+                  </div>
+                  <br>
+                  <hr>
+                  <!--  -->
+                  <!-- <sampleListLink> -->
+                    <div class="form-row" >
+                      <div class="col-1 mb-3 text-center">
+                        <label for="SelectData" style="font-weight: bolder;">
+                          <input type="checkbox" @click=toggleSelectAll v-model="isAllSelected"></label>
+                        
+                      </div>
+                      <div class="col-2 mb-3 text-center">
+                        <label for="Libid" style="font-weight: bolder;">Libid</label>
+                      </div>
+                      <div class="col-3 mb-3 text-center">
+                        <label for="Name" style="font-weight: bolder">Sample Name</label>
+                      </div>
+                      <div class="col-6 mb-3 text-center">
+                        <label for="path" style="font-weight: bolder;">path</label>
+                      </div>
+                    </div>
+                    <div is="sampleListLink"
+                      v-for="(item, index) in samplesDataInput"
+                      :key="item.path"
+                      :check-data = "item.checkData"
+                      :path="item.path"
+                      :libid="item.libid"
+                      :name="item.name"
+                      @data-change="updateSamepleData($event, index)"
+                    >
+                    </div>
+                  <!-- </sampleListLink> -->
+                  <hr>
+                  <!-- :checkData="item.checkData" -->
+                  <!-- <div class="row" >
+                    <div class="col-3" v-for="item in exportCondition"><input type="text" class="form-control"  :value="item"></div> 
+                  </div> -->
+                  <div class="errorData" v-if="errorSamplesData">Please specify the LIBID and smaple name. Some of the fields are not filled.</div>
+                  <md-button class="md-raised md-accent" @click="setReturn('typeOfSample','samples')">Previous</md-button>
+                  <md-button class="md-raised md-primary" @click="setSamplesDone('samples', 'sampleInfo');" 
+                    style="background-color: #00b7c9;">Continue</md-button>
+                </md-step> 
+                <!-- third  -->
+                <md-step id="sampleInfo" md-label="4. Specify the conditions for comparisons" :md-done.sync="sampleInfo">
+                  <h4>1. Please specify all your sample conditions first.</h4>
+                  <div>
+                    <md-chips v-model="condition" id='conditionMdChips' :md-limit="10" md-placeholder="Add sample conditions here..." @md-delete="onConditionRemoved" @md-insert="onConditionInserted">
+                      <template slot="md-chip" slot-scope="{ chip }" >
+                        {{ chip }}
+                      </template>
+                      <md-button class='md-suffix md-icon-button md-raised md-primary' @click="addCondition">
+                        <i class='fas fa-plus'></i>
+                      </md-button>
+                      <div class="md-helper-text ">Please use legal characters like a-z, A-Z, 0-9, and underline (_) for the condition; up to 10 conditions; Press enter to add conditions;</div>                      
+                    </md-chips>
+                  </div>
+                  <hr>
+                  <h4>2. Choose the condition for each of your sample.</h4>
+                  <div class="row">
+                    <div class="col-5">
+                      <label>name</label>
+                    </div>
+                    <div class="col-4">
+                      <label>condition</label>
+                    </div>
+                    <div class="col-3">
+                      <label>batch</label>
+                    </div>
+                  </div>
+                  <div class="form-row" v-for="(item, index) in sampleInfoInput">
+                    <div class="col-5 mb-1" style="border-bottom: 1px solid gray;">
+                      <span class="text-muted">{{ item.name}}</span>
+                    </div>
+                    <div class="col-4 d-flex justify-content-center mb-3">
+                      <select class="samplesInfoSel" v-model="sampleInfoInput[index].condition">
+                        <option v-for="(item) in condition" :value="item">{{item}}</option>
+                      </select>
+                    </div>
+                    <div class="col-3 mb-3">
+                      <select class="samplesInfoSel" v-model="sampleInfoInput[index].batch">
+                        <option :value="item" v-for="(item,index) in 5">{{ item }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="errorData" v-if="sampleInfoError">Some samples have no conditions. Please specify the condition for them.</div>
+                  <md-button class="md-raised md-accent" @click="setReturn('samples','sampleInfo')">Previous</md-button>
+                  <md-button class="md-raised md-primary" @click="setSampleInfo('sampleInfo','contrasts')" 
+                    style="background-color: #00b7c9;">Continue</md-button>
+                </md-step>
+                <!-- fourth -->
+                <md-step id="contrasts" md-label="5. Specify the comparison contrasts" :md-done.sync="contrasts">
+                  <h5>Setting your desired comparisons from previous defined conditions.</h5>
+                  <p>The analysis will compare miRNA expressions in Condition 1 (numerator) and Condition 2 (denominator).</p>
+                  <div class="row mt-2">
+                    <div class="col-5">
+                      <label>Condition 1</label>
+                    </div>
+                    <div class='col-1'>
+                      <label></label>
+                    </div>
+                    <div class="col-5">
+                      <label>Condition 2</label>
+                    </div>
+                    <div class="col-1">
+                      <label></label>
+                    </div>
+                  </div>
+                    <div class="row mb-2 mt-3" v-for="(thing,num) in contrastsModel">
+                      <div class="col-5 d-flex align-items-center" >
+                        <select v-model="contrastsModel[num].selconditionA" class='samplesInfoSel'>
+                          <option v-for="(item,index) in sampleCondition" :value="item" :disabled="item === contrastsModel[num].selconditionB">{{item}}</option>
+                        </select>
+                      </div>
+                      <div class='col-1 d-flex align-items-center'>
+                        <md-button type='button' class='md-icon-button md-primary' @click="switchContrastCondition(num)">
+                          <i class='fas fa-exchange-alt fa-lg'></i>
+                        </md-button>
+                      </div>
+                      <div class="col-5 d-flex align-items-center">
+                        <select v-model="contrastsModel[num].selconditionB" class='samplesInfoSel' >
+                          <option v-for="(item,index) in sampleCondition" :value="item" :disabled="item === contrastsModel[num].selconditionA">{{item}}</option>
+                        </select>
+                      </div>
+                      <div class="col-1 d-flex align-items-center">
+                        <md-button type="button" class="md-icon-button md-accent" @click="removeContrastCondition(num)">
+                          <i class='fas fa-times fa-lg'></i>
+                        </md-button>
+                      </div>
+                    </div>
+                  <div class="mt-1">
+                    <button class="btn btn-outline-primary addContrastBtn ml-1 my-2" @click="addContrastsConditionBtn()">
+                      <p class="addContrast">+</p>
+                    </button>
+                  </div>
+                  <hr>
+                  <div class="errorData" v-if="contrastsError">Please specify the comparison contrasts</div>
+                  <md-button class="md-raised md-accent" @click="setReturn('sampleInfo','contrasts')">Previous</md-button>
+                  <md-button class="md-raised md-primary" @click="setExcelDone('contrasts','saveFile')"
+                  style="background-color: #00b7c9">Continue</md-button>
+                </md-step>
+                <!-- five -->
+                <md-step id="saveFile" md-label="6. Create this analysis plan" :md-done.sync="saveFile">
+                  <h5>Set the DataFile record metadata for this analysis plan.</h5>
+                  <div v-if="currentProjectInfoRecord">
+                    <p>
+                      This plan was previouosly created: <a class='link' @click="openFileLink(currentProjectInfoRecord.id)">
+                        <i class='fas fa-file-alt fa-fw'></i><u>{{ currentProjectInfoRecord.prefix }}<b>{{ currentProjectInfoRecord.name }}</b>{{ currentProjectInfoRecord.suffix }}</u>
+                        <i class='fas fa-external-link-alt fa-fw'></i>
+                      </a>, and you may <a class='link' @click="navigateToFilePage(currentProjectInfoRecord.id, 'exeucte-pipeline')">click HERE</a> to execute the original plan.
+                    </P>
+                    <div class="alert alert-primary" role="alert">
+                      <b>[NOTE]</b>  If you made some changes in the above steps, you need to save the updates as another plan using the following forms.
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="mt-1 container ">
+                    <div class="row pl-3 pr-3 mt-1">
+                      <md-field class="col-12 mt-1">
+                        <label>Plan Name</label>
+                        <md-input v-model="SaveFileName" required></md-input>
+                      </md-field>
+                      <md-field class="col-5">
+                        <label>prefix (optional)</label>
+                        <md-input v-model="savePrefix"></md-input>
+                      </md-field>
+                      <div class="col-1"></div>
+                      <md-field class="col-5">
+                        <label>suffix (optional)</label>
+                        <md-input v-model="saveSuffix"></md-input>
+                      </md-field>
+                      <md-field>
+                        <md-chips v-model="styletags" :md-limit="9" md-placeholder="Add additional tags...">
+                          <md-chip>project-info</md-chip>
+                          <template slot="md-chip" slot-scope="{ chip }">
+                            {{ chip }} 
+                          </template>
+                          <div class="md-helper-text">The project-info tag will be automatically added.</div>
+                        </md-chips>
+                      </md-field>
+                      <md-field>
+                        <label>Description</label>
+                        <md-textarea v-model="saveFileDescroption"></md-textarea>
+                      </md-field> 
+                    </div>
+                  </div> 
+                  <hr>
+                  <div class="errorData" v-if="saveFileError">Please specify the name for this newly created analysis plan.</div>
+                  <md-button class="md-raised md-accent" @click="setReturn('contrasts','saveFile')">Previous</md-button>
+                  <md-button class="md-raised md-primary" @click="setSaveFile('saveFile','finishForm')">
+                    <span v-if="!currentProjectInfoRecord">Create this plan</span>
+                    <span v-if="currentProjectInfoRecord">Save as another plan</span>
+                  </md-button>
+                </md-step>
+                <md-step id="finishForm" md-label="7. Execute the analysis plan" :md-done.sync="finishForm" v-if="!currentProjectInfoRecord">
+                  <div class="mt-3 container-fluid">
+                    <h4>You have successfully created an analysis plan.</h4>
+                    <div class="finishInterface uploadFadeIn ">
+                      <ul class="text-left row exportList px-0">
+                        <li class="col-2 listNameBg text-secondary"><span class="pl-2">Name :</span></li>
+                        <li class="col-10">
+                          <span class="pl-2 textGray">{{ exportData.prefix }}</span>
+                          <span class="text-secondary">{{ exportData.name }}</span>
+                          <span class="textGray">{{ exportData.suffix }}</span>
+                        </li>
+                        
+                        <li class="li-space"></li>
+                        
+                        <li class="col-2 listNameBg text-secondary"><span class="pl-2">Time :</span></li>
+                        <li class="col-10 text-muted"><span class="pl-2">{{ exportData.updatedAt }}</span></li>
+                        <li class="li-space"></li>
+                        <li class="col-2 listNameBg text-secondary"><span class="pl-2">Tags :</span></li>
+                        <li class="col-10 text-muted" ><span class="mx-2 badgeTag" v-for="item in exportData.tags">{{ item }}</span></li>
+                        <li class="li-space"></li>
+                        <li class="col-2 listNameBg text-secondary"><span class="pl-2">Description :</span></li>
+                        <li class="col-10 text-muted"><span class="pl-2">{{ exportData.desc }}</span></li>
+                        <li class="li-space"></li>
+                        <button class='btn btn-info' @click="openFileLink(exportData.id)">
+                          <i class='fas fa-external-link-alt mr-2'></i>View the file record
+                        </button>
+                        <button class='btn btn-primary ml-2' @click="navigateToFilePage(exportData.id, 'exeucte-pipeline')">
+                          <i class='fas fa-cogs mr-2'></i>Go to plan execution page
+                        </button>
+                      </ul>
+                    </div>
+                  </div> 
+                </md-step>
+              </md-steppers>
+            </div>
+          </template>
+        </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      <strong>Copyright &copy; Chi Yang & Kuan-Fu Chen</strong> All rights reserved.
+    </div>
+    <!-- Default to the left -->
+    BDP miRNA Profiler
+  </footer>
+</div>
+<script type="text/x-template" id="stepSampleTemplate">
+  <div class="form-row" >
+    <div class="col-1 mb-3 custom-control text-center ">
+      <input type="checkbox" v-model="dataCheck"  class="dataCheckCss" >
+      <!-- v-bind:checked="checked" -->
+    </div>
+    <div class="col-2 mb-3">
+      <input type="text" class="form-control"  v-model="dataLibid" required  :disabled="dataCheck === false">
+    <!--  -->
+    </div>
+    <div class="col-3 mb-3">
+      <input type="text" class="form-control"  v-model="dataFileName" required :disabled="dataCheck === false">
+    </div>
+    <div class="col-6 mb-3" :class="{'text-muted':dataCheck === false}" >
+      <span>{{dataPath}}</span>
+    </div>
+  </div>
+</script>
+<script src="./theme/js/adminlte.min.js"></script>
+<script src="./scripts/prepare_project_info.js"></script>
+<script src="./scripts/main.js" ></script>
+<!-- <script>
+  const BdpAPI = new BdpPageAPI();
+  (async () => {
+    await BdpAPI.initialize();
+  })().catch(console.log);
+  $('#pageTitle').text('The miRNA Profiler');
+</script> -->
+</body>
+</html>

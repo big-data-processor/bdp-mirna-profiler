@@ -1,0 +1,31 @@
+.link {
+  cursor: pointer;
+}
+pre {
+  color: white;
+  background-color: rgb(30, 30, 30);
+}
+.wrapper .main-sidebar .brand-link,
+.sidebar-mini .wrapper .main-sidebar :hover,
+.sidebar-mini .wrapper .main-sidebar .brand-link :hover{
+    text-decoration: none;
+    color: #fff;
+}
+.card-body {
+  overflow: auto;
+}
+
+.nav-sidebar:hover {
+  overflow: hidden;
+}
+.nav-header {
+  font-weight: 600;
+  color: rgb(59, 186, 206) !important;
+}
+.nav-link.active {
+  padding: 8px 5px;
+}
+
+.md-body-1, .md-body-2, body {
+  letter-spacing: unset;
+}

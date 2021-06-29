@@ -1,0 +1,18 @@
+- var:
+    theMySqlContainerName: "{{ argv[0] }}" #The MySQL container name|value|bdp-mysql|||
+    mySqlVolumeName: "{{ argv[1] }}" #MySQL volume name|value|bdp-mysql-volume|||
+  task-template:
+    name: "remove-container"
+    exec: docker
+    image: 
+    args:
+      - "rm"
+      - "-f"
+      - "{{ var.theMySqlContainerName }}"
+- task-template:
+    name: 'remove-volume'
+    exec: docker
+    args:
+      - volume
+      - rm
+      - "{{ var.mySqlVolumeName }}"

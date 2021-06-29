@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>BDP miRNA profiler</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="./theme/css/adminlte.min.css">
+  <link rel="stylesheet" href="./styles/main.css">
+  <script src="https://cdn.jsdelivr.net/gh/big-data-processor/bdp-page-api/bdp-page-api.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block homeLink">
+        <a href="#" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block docLink">
+        <a href="#" class="nav-link">Documentation</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block planListLink">
+        <a href="#" class="nav-link">Plan List</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block prepareProjectInfoLink">
+        <a href="#" class="nav-link">Create Plan</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block executePipelineLink">
+        <a href="#" class="nav-link">Run Plan</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class='nav-item'>
+        <a class="nav-link link refreshLink" role="button">
+          <i class="fas fa-sync-alt"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link pageListLink" role="button">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+      <li class='nav-item'>
+        <a class="nav-link link toggleFullPageLink" role="button">
+          <i class="fas fa-expand-alt"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link">
+      <img src="/assets/img/BDP_VER0_7_4C_Black.svg" class="brand-image"
+        style="opacity: .8; width: 40px; margin-left: 5px;">
+      <span class="brand-text font-weight-light">BDP miRNA Profiler</span>
+    </a>
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-header">Current Project</li>
+          <li class='nav-item' id='currentProjectLink'></li>
+          <li class="nav-header">Introduction</li>
+          <li class='nav-item homeLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>Home</p>
+            </a>
+          </li>
+          <li class='nav-item docLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>Documentation</p>
+            </a>
+          </li>
+          <li class='nav-item planListLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-list"></i>
+              <p>Plans in this project</p>
+            </a>
+          </li>
+          <li class="nav-header">Run the workflow</li>
+          <li class='nav-item prepareProjectInfoLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tasks"></i>
+              <p>1. Create an analysis plan</p>
+            </a>
+          </li>
+          <li class='nav-item executePipelineLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-cogs fa-fw"></i>
+              <p>2. Execute a plan</p>
+            </a>
+          </li>
+          <li class="nav-header">Preparations</li>
+          <li class='nav-item prepareRefLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-download"></i>
+              <p>1. Download references</p>
+            </a>
+          </li>
+          <li class='nav-item dbPrepLink'>
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-database"></i>
+              <p>2. Prepare databases</p>
+            </a>
+          </li>
+          <li class='nav-item downloadExampleLink'>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>3. Get example data</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <div class="content-wrapper">
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark" id='pageTitle'></h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item homeLink"><a href="#">Home</a></li>
+              <li class="breadcrumb-item">Preparations</li>
+              <li class="breadcrumb-item active">Database Preparation</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header d-flex p-0">
+                <h3 class="card-title p-3" id='taskExeTitle'>Database Initialization</h3>
+                <ul class="nav nav-pills ml-auto p-2" id='dbInitTab'>
+                  <li class="nav-item"><a class="nav-link active" href="#newDBTab" data-toggle="tab">Create a New Database</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#viewDBTab" data-toggle="tab">View Records</a></li>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                  </div>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" style='max-height: unset;' id="newDBTab" role="tabpanel" aria-labelledby="newDBTab" style='max-height: 600px; overflow: auto;'>
+                    <h4>Initiate a new MySQL database</h4>
+                    <p>*If you have your own MySQL database, you can skip this procedure.</p>
+                    <p>
+                      This procedure automates the database setups.
+                      The Docker container will be created and the underlying files of the database is stored in a Docker volume.
+                      Users can specify the names for the container and volume.
+                      The procedure also set the root and user account for the MySQL database.
+                      For convenience, the password is visible as an argument.
+                    </p>
+                    <br>
+                      <div class="form-group">
+                        <label for="containerName">The Docker container name for the MySQL database instance</label>
+                        <input type='text' class="form-control" id="containerName" value="bdp-mysql-miRNApro" placeholder="The container name for the MySQL instance">
+                      </div>
+                      <div class="form-group">
+                        <label for="volumeName">The Docker volume name for stroing the MySQL files</label>
+                        <input type="text" class="form-control" id="volumeName" value="bdp-mysql-miRNApro-volume" placeholder="The password for the MySQL user account password">
+                      </div>
+                      <div class="form-group">
+                        <label for="mysqlPort">MySQL port</label>
+                        <input type='number' class="form-control" id="mysqlPort" value=33061 placeholder="The network port for the MySQL database">
+                      </div>
+                      <div class="form-group">
+                        <label for="rootPasswd">MySQL Root Password</label>
+                        <input type="text" class="form-control" id="rootPasswd" value="bdp-mysql-root-passwd" placeholder="The password for the MySQL root account">
+                      </div>
+  
+                      <div class="form-group">
+                        <label for="userName">MySQL username</label>
+                        <input type="text" class="form-control" id="userName" value="bdp-mysql-miRNApro-user" placeholder="The password for the MySQL user account name">
+                      </div>
+                      <div class="form-group">
+                        <label for="userPasswd">MySQL user password</label>
+                        <input type="text" class="form-control" id="userPasswd" value="bdp-mysql-miRNApro-passwd" placeholder="The password for the MySQL user account password">
+                      </div>
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="isRestrictLocal" checked>
+                        <label class="form-check-label" for="isRestrictLocal">Restrict MySQL database access to localhost (127.0.0.1)?</label>
+                      </div>
+                      <button class="btn btn-primary" id='initDbBtn'>Create a new database instance</button>
+                  </div>
+                  <div class="tab-pane fade" id="viewDBTab" role="tabpanel" aria-labelledby="viewDBTab" style='max-height: 600px; overflow: auto;'>
+                    <h4>1. Select an initialized database to proceed</h4>
+                    <p>You only need one initailized database.</p>
+                    <table class="table table-hover" id='initializedDBTable'>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Description</th>
+                          <th>Creation Time</th>
+                        </tr>
+                      </thead>
+                      <tbody id='initializedDBTbody'></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class='card-footer'>
+                <span id='taskExeFooter'>You have selected the <b>Mouse</b> organism.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" id='resultZone'>
+          <div class='col-md-6'>
+            <div class="card" style='height: 350px;'>
+              <div class="card-header">
+                <h3 class="card-title">The selected record</h3>
+                <div class="card-tools">
+                  <span class="badge badge-primary">The Result</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <dl class="row" id='selectedDBRecord'></dl>
+              </div>
+              <div class="card-footer" id='selectedDBRecordFooter'>
+              </div>
+            </div>
+          </div>
+          <div class='col-md-6'>
+            <div class="card" style='height: 350px;'>
+              <div class="card-header">
+                <h3 class="card-title">The selected database parameters</h3>
+                <div class="card-tools">
+                  <span class="badge badge-primary">The DB parameters</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <dl class="row" id='selectedDBparams'></dl>
+              </div>
+              <div class="card-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" id='importZone'>
+          <div class='col-12'>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Importing references to the selected database.</h3>
+                <div class="card-tools">
+                  <span class="badge badge-primary">Label</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <h4>2. Import mirBase v22b</h4>
+                  <div id='miRBaseRecordContainerDiv'>
+                    
+                  </div>
+                <hr>
+                <h4>3. Import UCSC genome reference</h4>
+                  <div class='row' id='ucscRecordContainerDiv'>
+                  </div>
+              </div>
+              <div class="card-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      <strong>Copyright &copy; Chi Yang</strong> All rights reserved.
+    </div>
+    <!-- Default to the left -->
+    BDP miRNA Profiler
+  </footer>
+</div>
+<script src="./theme/js/adminlte.js" ></script>
+<script src="./scripts/main.js" ></script>
+<script src="./scripts/database_preparation.js" ></script>
+</body>
+</html>

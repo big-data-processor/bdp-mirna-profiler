@@ -1,0 +1,17 @@
+- var:
+    theProjectInfoFile: "{{ argv[0] }}" #The project info file|inFile|project-info|xlsx|and|
+    theProjectFolder: "{{ argv[1] }}" #The project folder|inFile|Folder,seq-project|Folder|or|
+    theResultFolderOfDeMiRnaAnalysis: "{{ argv[2] }}" #The result folder of DE-miRNA analysis|inFile|Folder,mirna-analysis|Folder|and|
+    theMultiQcOutputFolder: "{{ argv[3] }}" #The multiQC output folder|inFile|Folder,multi-qc|Folder|or|
+    theFinalReports: "{{ argv[4] }}" #The final reports|outFile|Folder,seq-project|Folder|or|
+  task-template:
+    name: make-final-report
+    image: "registry.gitlab.com/chiyang/bdp-bcgsc-mirna:0.3.1"
+    exec: node
+    args:
+      - /package/scripts/finalReport.js
+      - "{{ var.theProjectInfoFile | pathMapping }}"
+      - "{{ var.theProjectFolder | pathMapping }}"
+      - "{{ var.theResultFolderOfDeMiRnaAnalysis | pathMapping }}"
+      - "{{ var.theMultiQcOutputFolder | pathMapping }}"
+      - "{{ var.theFinalReports | pathMapping }}"

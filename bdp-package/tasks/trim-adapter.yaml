@@ -1,0 +1,21 @@
+- var:
+    mergedSeqFolder: "{{ argv[0] }}" #The folder of fastq.gz|inFile|Folder,fastq-merged|Folder|and|
+    trimmedSeqFolder: "{{ argv[1] }}" #The folder of trimmed sequence|outFile|Folder,fastq-merged|Folder|or|
+    adapterSeq: "{{ argv[2] }}" #The adapter sequence|value||||
+  #  r1_files: "{{ argv[0] | listFromFileGlob(['*_R1.fastq.gz']) | sort }}"
+  #  r2_files: "{{ argv[0] | listFromFileGlob(['*_R2.fastq.gz']) | sort }}"
+  batch-items: "{{ var.mergedSeqFolder | listFromFileGlob(['*.fastq.gz']) }}"
+  # batch-items: "{{ r1 | _('zip', r2) }}"
+  task-template:
+    name: run-trim-galore
+    #image: quay.io/biocontainers/trim-galore:0.6.5--0
+    image: "registry.gitlab.com/chiyang/bdp-bcgsc-mirna:0.3"
+    exec: trim_galore
+    args:
+    - --dont_gzip
+    - --fastqc
+    - -o
+    - "{{ var.trimmedSeqFolder | ensureDir | pathMapping }}" # The output folder
+    - "{{ '--adapter' if var.adapterSeq }}"
+    - "{{ var.adapterSeq if var.adapterSeq }}"
+    - "{{ item | pathMapping }}"

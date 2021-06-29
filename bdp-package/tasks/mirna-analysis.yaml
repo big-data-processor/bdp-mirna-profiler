@@ -1,0 +1,24 @@
+- var:
+    theTcgaLevel3Folder: "{{ argv[0] }}" #The TCGA level3 folder|inFile|Folder,tcga-level3|Folder|and|
+    theProjectInfoFile: "{{ argv[1] }}" #The project info file|inFile|project-info|xlsx|and|
+    targetScanReferenceFile: "{{ argv[2] }}" #TargetScan reference file|inFile|target-scan,reference|txt|and|This file can be found at http://www.targetscan.org/vert_71/vert_71_data_download/Predicted_Targets_Context_Scores.default_predictions.txt.zip
+    theKeggPathwayFile: "{{ argv[3] }}" #The KEGG pathway file|inFile|kegg-pathway|txt|or|This file can be downloaded via http://rest.kegg.jp/list/pathway/hsa. You can replace the last three characters for other organisms. 
+    theGenomeAnnotationFile: "{{ argv[4] }}" #The genome annotation file (GTF)|inFile|genome,annotation|gtf|and|Retrieve the transcript length for each gene and this information will be used for GO/KEGG enrichment analysis.
+    theBiomaRtAnnotationTable: "{{ argv[5] }}" #The biomaRt annotation table|inFile|biomart|txt|or|
+    theCutoffToRemoveLowAbundanceMiRnaSpecies: "{{ argv[6] }}" #The cutoff to remove low abundance miRNA species|value|0|||If set to -1, we use global mean; if set to  > 0 and <1, it used as a quantile value to find the cutoff value;  If set to any number that is greater or equal to 1, the absolute cutoff is applied to remove miRNA species.  The miRNA species will be removed only when ALL samples failed to meet the criteria> the read counts are greater or equal to the cutoff.
+    theResultFolderOfDeMiRnaAnalysis: "{{ argv[7] | ensureDir }}" #The result folder of DE-miRNA analysis|outFile|Folder,mirna-analysis|Folder|or|
+  task-template:
+    name: mirna-analysis
+    image: "registry.gitlab.com/chiyang/bdp-bcgsc-mirna:0.3.1"
+    exec: Rscript
+    args:
+      - --vanilla
+      - /package/scripts/miRNA_exp_analysis.R
+      - "{{ var.theTcgaLevel3Folder | pathMapping }}"
+      - "{{ var.theProjectInfoFile | pathMapping }}"
+      - "{{ var.targetScanReferenceFile | pathMapping }}"
+      - "{{ var.theKeggPathwayFile | pathMapping }}"
+      - "{{ var.theGenomeAnnotationFile | pathMapping }}"
+      - "{{ var.theBiomaRtAnnotationTable | pathMapping }}"
+      - "{{ var.theCutoffToRemoveLowAbundanceMiRnaSpecies }}"
+      - "{{ var.theResultFolderOfDeMiRnaAnalysis | pathMapping }}"

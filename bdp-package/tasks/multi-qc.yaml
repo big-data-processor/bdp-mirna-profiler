@@ -1,0 +1,13 @@
+- var:
+    trimmedSeqFolder: "{{ argv[0] }}" #The input alignment folder|inFile|Folder,trimmed-seq|Folder|and|
+    outputMultiQCFolder: "{{ argv[1] }}" #The multiQC output folder|outFile|Folder,multi-qc|Folder|or|
+  task-template:
+    name: run-multiqc
+    image: quay.io/biocontainers/multiqc:1.1--py27_0
+    exec: multiqc
+    args:
+    - "{{ var.trimmedSeqFolder | pathMapping }}"
+    - -o
+    - "{{ var.outputMultiQCFolder | pathMapping }}"
+    - --export
+    - --force

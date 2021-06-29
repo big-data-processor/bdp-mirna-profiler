@@ -1,0 +1,11 @@
+- var:
+    theProjectFolder: "{{ argv[0] }}" #The project folder|inFile|Folder,seq-project|Folder|or|
+    theTcgaLevel3Folder: "{{ argv[1] }}" #The TCGA level3 folder|outFile|Folder,tcga-level3|Folder|or|
+  task-template:
+    name: create-tcga-level3
+    image: "registry.gitlab.com/chiyang/bdp-bcgsc-mirna:0.3"
+    exec: node
+    args:
+      - /package/scripts/move_tcga_level3.js
+      - "{{ var.theProjectFolder | pathMapping }}"
+      - "{{ var.theTcgaLevel3Folder | pathMapping }}"

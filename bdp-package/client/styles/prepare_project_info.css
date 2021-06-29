@@ -1,0 +1,176 @@
+.stepView{
+    border: 1.5px solid #00c7f2;
+    background-color: #ffffff;
+    height:calc(100% - 30px);
+    overflow-y: auto;
+    position: relative;
+}
+.form-control{
+    border:1px solid #8b8c8d;
+}
+.addContrastBtn{
+    width: 45px;
+    height: 35px;
+    font-size: 30px;
+    font-weight: 700;
+    padding: 0 0 0 0;
+    border-radius: 3px;
+}
+.removeCondition{
+    border: 1px solid black;
+    border-radius: 3px;
+    font-size: 24px;
+    font-weight: bolder;
+    width: 40px;
+    height: 30px;
+}
+.addContrast{
+    margin-top: -5px;
+}
+.removeContrast{
+    margin-top: -6px;
+}
+.btn-folder{
+    justify-content: center;
+}
+/* .btn-folder :hover, :focus,.btn-severImport :hover, .btn-severImport :focus{
+    background: #02c0ea !important;
+} */
+.btnDataType :hover{
+    background: #02c0ea !important;
+}
+.selectType{
+    transition: all 0.4s;
+}
+.btn-severImport,.btn-folder{
+    background: #02c0ea !important;
+}
+/* .btn-folder :active,.btn-folder.active{
+    background-color: #01b5dd !important;
+    
+} */
+.cardDistance{
+    width:29%;
+    margin-left:2%;
+    margin-right: 2%;
+    margin-bottom: 15px;
+    border:1px solid #17a2b8;
+}
+/* :focus{
+    background-color: #01b5dd;
+} */
+.btnGlobFile {
+    background:#d1ecf1;
+}
+.samplesInfoSel{
+    width: 90%;
+    border-radius: 4px;
+    line-height: 1.2;
+    padding: 3px 3px;
+    border: 1px solid #8b8c8d;
+}
+.singleStyle{
+    width: 300px;
+    background-color: #d7dcdd;
+}
+.folderRemoveSel{
+    width: 25px;
+    height: 25px;
+    border: 2px solid #8b8c8d;
+    position: relative;
+    cursor: pointer;
+}
+.folderRemoveSel span{
+    position: absolute;
+    font-weight: 700;
+    top: 0px;
+    left: 6px;
+}
+.dataCheckCss{
+    width: 18px;
+    height: 18px;
+    /* border-radius: 2px; */
+}
+.savePosition{
+    width: 100%;
+    height: 94vh;
+    background-color: rgba(255,255,255,0.9) ;
+    position: fixed;
+    z-index: 60; 
+    overflow-y: auto;
+    top:120px
+}
+.formSave{
+    width: 600px;
+    height: 600px;
+    border-radius: 10px;
+    border: 1px solid #495057;
+    opacity: 1;
+}
+.errorData{
+    width: 100%;
+    font-size: 14px;
+    text-align: center;
+    background: #f5df2e;
+}
+.formInterface{
+    border-top: 1.5px solid #01a9ac;
+    /* border-bottom: 1.5px solid #01a9ac; */
+}
+.finishInterface{
+    width: 100%;
+}
+
+.finishText{
+    font-size: 36px;
+    text-align: center;
+    font-weight: 500;
+    color: rgba(52, 58, 64, 0.85);
+}
+
+.finishButton{
+    width: 33%;
+}
+@media(max-width:992px){
+    .finishButton{
+        width: 80%;
+    }
+    .exportList li{
+        font-size: 13px;
+        line-height: 2.8;
+    }
+}
+.uploadFadeIn{
+    opacity: 0;
+}
+
+
+.exportList{
+    border-radius: 2px;
+    border-top: 1px solid #e9ecef;
+    border-left: 1px solid #e9ecef;
+    border-right: 1px solid #e9ecef;
+}
+.exportList li{
+    list-style: none;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 2.8;
+    box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.03);
+}
+.textGray{
+    color: #acb5bc ;
+}
+.exportList .li-space{
+    width: 100%;
+    height: 3px;
+    background-color: #f2f2f2;
+}
+.badgeTag{
+    background-color: #f0f0ff;
+    padding: 2px 5px 2px 5px;
+    border-radius: 3px;
+}
+.listNameBg{
+    background-color: rgba(235, 255, 172, 0.1);
+}

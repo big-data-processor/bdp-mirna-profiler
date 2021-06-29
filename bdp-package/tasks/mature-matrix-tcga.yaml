@@ -1,0 +1,13 @@
+- var:
+    theAdfFile: "{{ argv[0] }}" #The adf file|inFile|adf|adf|or|
+    theTcgaLevel3Folder: "{{ argv[1] }}" #The TCGA level3 folder|inFile|Folder,tcga-level3|Folder|and|
+  task-template:
+    name: generate-matrue-mirna-tcga
+    image: "registry.gitlab.com/chiyang/bdp-bcgsc-mirna:0.3"
+    exec: perl
+    args:
+      - /package/scripts/bcgsc-mirna-v0.2.7/code/custom_output/tcga/expression_matrix_mimat.pl
+      - -m
+      - "{{ var.theAdfFile | pathMapping }}"
+      - -p
+      - "{{ var.theTcgaLevel3Folder | pathMapping }}"

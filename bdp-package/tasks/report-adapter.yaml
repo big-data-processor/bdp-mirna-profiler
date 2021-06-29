@@ -1,0 +1,11 @@
+- var:
+    trimmedSeqFolder: "{{ argv[0] }}" #The input folder (containing bam files)|inFile|Folder,trimmed-seq|Folder|and|
+  batch-items: "{{ var.trimmedSeqFolder | listFromFileGlob(['*.bam']) | sort | dump }}"
+  task-template:
+    name: report-adapter
+    exec: /bin/sh
+    image: quay.io/biocontainers/samtools:1.9--h46bd0b3_0
+    args:
+    - -c
+    - >-
+      samtools view {{ item | pathMapping }} | awk '{arr[length($10)]+=1} END {for (i in arr) {print i\" \"arr[i]}}' | sort -t ' ' -k1n > {{ path.parse(item).dir | suffix('/' + path.parse(item).name + '_adapter.report') | pathMapping }}
